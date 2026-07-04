@@ -1,0 +1,28 @@
+---
+// Scrolling street-food marquee strip. Content duplicated for a seamless loop.
+const items = [
+  'Handmade fresh',
+  'Steamed to perfection',
+  'Himalayan herbs',
+  'Real ingredients',
+  '365-day service',
+  'Hygienically made',
+  'Est. 2019 · Jamshedpur',
+];
+---
+<div class="marquee overflow-hidden border-y-2 border-ink bg-fry py-3" aria-hidden="true">
+  <div class="marquee-track gap-8 pr-8">
+    {[0, 1].map(() => (
+      <div class="flex shrink-0 items-center gap-8">
+        {items.map((item) => (
+          <span class="flex items-center gap-8 whitespace-nowrap font-display text-lg font-bold uppercase tracking-wide text-ink">
+            {item}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-chili" aria-hidden="true">
+              <path d="m12 2 2.6 6.2L21 9l-5 4.4 1.6 6.6L12 16.4 6.4 20 8 13.4 3 9l6.4-.8z"/>
+            </svg>
+          </span>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>

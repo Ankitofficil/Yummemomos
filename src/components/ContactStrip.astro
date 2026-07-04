@@ -1,0 +1,22 @@
+---
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+---
+<section class="container-x py-14 md:py-20">
+  <div class="panel-sunset reveal grid gap-8 rounded-[2rem] border-2 border-ink px-6 py-12 text-white shadow-[6px_7px_0_0_var(--color-ink)] md:grid-cols-2 md:items-center md:px-14">
+    <div>
+      <h2 class="text-3xl md:text-4xl text-white">Hungry, or looking to stock us?</h2>
+      <p class="mt-3 max-w-md text-white/85">
+        Order in seconds on WhatsApp, ring us any time, or start a franchise conversation — we’re here 365 days a year.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3 md:justify-end">
+      <a href={site.whatsapp} target="_blank" rel="noopener" class="btn bg-white text-chili hover:bg-cream">
+        <Icon name="whatsapp" size={18} /> Order on WhatsApp
+      </a>
+      <a href={`tel:+${site.phones[0].value}`} class="btn border-[1.5px] border-white/70 text-white hover:bg-white/10">
+        <Icon name="phone" size={18} /> Call {site.phones[0].label}
+      </a>
+    </div>
+  </div>
+</section>

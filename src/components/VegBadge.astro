@@ -1,0 +1,25 @@
+---
+// FSSAI-convention veg/non-veg indicator: square outline with a dot.
+interface Props {
+  veg: boolean;
+  jain?: boolean;
+  class?: string;
+}
+const { veg, jain = false, class: cls = '' } = Astro.props;
+const color = veg ? 'var(--color-herb)' : 'var(--color-chili)';
+const label = jain ? 'Jain vegetarian' : veg ? 'Vegetarian' : 'Non-vegetarian';
+---
+<span
+  class={`inline-flex items-center gap-1.5 ${cls}`}
+  role="img"
+  aria-label={label}
+  title={label}
+>
+  <span
+    class="grid place-items-center"
+    style={`width:18px;height:18px;border:1.6px solid ${color};border-radius:4px;`}
+  >
+    <span style={`width:8px;height:8px;border-radius:999px;background:${color};`}></span>
+  </span>
+  {jain && <span class="text-xs font-semibold" style={`color:${color}`}>Jain</span>}
+</span>

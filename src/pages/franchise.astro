@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const benefits = [
+  { icon: 'factory', title: 'Proven product', body: 'An award-winning, well-loved momo range with repeat demand.' },
+  { icon: 'truck', title: 'Reliable supply', body: 'Consistent quality and timely, dependable frozen delivery.' },
+  { icon: 'shield', title: 'Quality you can trust', body: 'Hygienic, quality-tested manufacturing you can sell with confidence.' },
+  { icon: 'heart', title: 'Long-term partnership', body: 'We back our partners for the long run, not a one-off order.' },
+];
+---
+<BaseLayout
+  title="Become a Partner — Yumme Momos Franchise & Stockist"
+  description="Partner with Yumme Momos as a franchise or stockist. Reliable frozen momo supply, a proven product, and a growing brand. Send an enquiry or WhatsApp us."
+>
+  <!-- Hero -->
+  <section class="container-x py-12 md:py-16">
+    <div class="reveal max-w-2xl">
+      <span class="eyebrow text-herb"><Icon name="factory" size={16} /> Franchise &amp; stockist</span>
+      <h1 class="mt-3 text-4xl md:text-6xl">Become a Partner</h1>
+      <p class="mt-4 text-lg text-ink/75">
+        Bring Jharkhand’s award-winning momos to your shelves. Whether you’re a retailer looking to stock us or an entrepreneur exploring a franchise, we’d love to talk.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="#enquiry" class="btn btn-primary"><Icon name="arrow" size={18} /> Send an enquiry</a>
+        {site.whatsappFranchise.map((w, i) => (
+          <a href={w} target="_blank" rel="noopener" class="btn btn-ghost">
+            <Icon name="whatsapp" size={18} /> WhatsApp {i === 0 ? site.phones[0].label : '7873282812'}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="container-x py-8 md:py-12">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {benefits.map((b) => (
+        <div class="reveal sticker p-7">
+          <span class="grid h-12 w-12 place-items-center rounded-2xl bg-herb-50 text-herb"><Icon name={b.icon} size={26} /></span>
+          <h3 class="mt-5 text-xl">{b.title}</h3>
+          <p class="mt-2 text-[0.95rem] text-ink/70">{b.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Enquiry form -->
+  <section id="enquiry" class="container-x py-14 md:py-20">
+    <div class="sticker reveal grid gap-10 rounded-[2rem] p-6 md:grid-cols-[1fr_1.2fr] md:p-10">
+      <div>
+        <h2 class="text-3xl md:text-4xl">Start the conversation</h2>
+        <p class="mt-3 text-ink/70">
+          Fill in your details and we’ll open a pre-filled WhatsApp message to our franchise team — no account or app needed. Prefer to talk now? WhatsApp us directly.
+        </p>
+        <div class="mt-6 space-y-3 text-[0.95rem]">
+          {site.whatsappFranchise.map((w, i) => (
+            <a href={w} target="_blank" rel="noopener" class="flex items-center gap-2 text-herb hover:underline">
+              <Icon name="whatsapp" size={18} /> {i === 0 ? site.phones[0].label : '7873282812'}
+            </a>
+          ))}
+          <a href={`mailto:${site.email}`} class="flex items-center gap-2 text-ink/75 hover:text-chili">
+            <Icon name="mail" size={18} /> {site.email}
+          </a>
+        </div>
+      </div>
+
+      <!-- Deep-links to a pre-filled WhatsApp message. No backend. -->
+      <form id="franchise-form" class="grid gap-4">
+        <div class="grid gap-1.5">
+          <label for="f-name" class="text-sm font-semibold">Full name</label>
+          <input id="f-name" name="name" type="text" required autocomplete="name"
+            class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white" />
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="grid gap-1.5">
+            <label for="f-phone" class="text-sm font-semibold">Phone</label>
+            <input id="f-phone" name="phone" type="tel" required autocomplete="tel"
+              class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white" />
+          </div>
+          <div class="grid gap-1.5">
+            <label for="f-city" class="text-sm font-semibold">City</label>
+            <input id="f-city" name="city" type="text" required
+              class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white" />
+          </div>
+        </div>
+        <div class="grid gap-1.5">
+          <label for="f-msg" class="text-sm font-semibold">Message <span class="font-normal text-ink/50">(optional)</span></label>
+          <textarea id="f-msg" name="message" rows="3"
+            class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white"
+            placeholder="Tell us about your shop / plans…"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-1 w-full text-lg">
+          <Icon name="whatsapp" size={20} /> Send via WhatsApp
+        </button>
+        <p class="text-center text-xs text-ink/50">
+          Opens WhatsApp with your details pre-filled. TODO: swap to Formspree/Netlify Forms if the client prefers email submissions.
+        </p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ waNumber: '919142081374' }}>
+  const form = document.getElementById('franchise-form');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const text =
+      `New franchise / stockist enquiry\n\n` +
+      `Name: ${data.get('name')}\n` +
+      `Phone: ${data.get('phone')}\n` +
+      `City: ${data.get('city')}\n` +
+      `Message: ${data.get('message') || '—'}`;
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+  });
+</script>

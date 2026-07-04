@@ -1,0 +1,57 @@
+---
+// Lazy YouTube facade — no iframe until the user clicks. Loads only the
+// thumbnail; the real player is injected on interaction.
+import Icon from './Icon.astro';
+interface Props {
+  id: string;
+  title: string;
+}
+const { id, title } = Astro.props;
+const thumb = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+<div
+  class="lite-yt group relative aspect-video cursor-pointer overflow-hidden rounded-[var(--radius-card)] bg-ink shadow-[var(--shadow-card)]"
+  data-id={id}
+  role="button"
+  tabindex="0"
+  aria-label={`Play video: ${title}`}
+>
+  <img
+    src={thumb}
+    alt={title}
+    loading="lazy"
+    width="480"
+    height="270"
+    class="h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
+  />
+  <div class="absolute inset-0 grid place-items-center">
+    <span class="grid h-16 w-16 place-items-center rounded-full bg-chili text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+      <Icon name="play" size={26} />
+    </span>
+  </div>
+  <span class="absolute bottom-3 left-4 right-4 truncate text-sm font-semibold text-white/90">{title}</span>
+</div>
+
+<script>
+  const activate = (el: HTMLElement) => {
+    const id = el.dataset.id;
+    if (!id) return;
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('src', `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`);
+    iframe.setAttribute('title', 'YouTube video player');
+    iframe.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
+    iframe.setAttribute('allowfullscreen', 'true');
+    iframe.className = 'absolute inset-0 h-full w-full';
+    el.innerHTML = '';
+    el.appendChild(iframe);
+  };
+  document.querySelectorAll<HTMLElement>('.lite-yt').forEach((el) => {
+    el.addEventListener('click', () => activate(el));
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate(el);
+      }
+    });
+  });
+</script>

@@ -1,0 +1,18 @@
+---
+// Wavy section divider. `fill` = color of the section it belongs to;
+// flip=true to point the wave upward (top of a section).
+interface Props {
+  fill?: string;
+  flip?: boolean;
+  class?: string;
+}
+const { fill = 'var(--color-cream)', flip = false, class: cls = '' } = Astro.props;
+---
+<div class={`pointer-events-none w-full overflow-hidden leading-none ${flip ? 'rotate-180' : ''} ${cls}`} aria-hidden="true">
+  <svg viewBox="0 0 1440 64" preserveAspectRatio="none" class="block h-8 w-full md:h-12">
+    <path
+      d="M0,32 C120,64 240,0 360,16 C480,32 600,64 720,48 C840,32 960,0 1080,16 C1200,32 1320,56 1440,32 L1440,64 L0,64 Z"
+      style={`fill:${fill}`}
+    />
+  </svg>
+</div>

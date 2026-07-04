@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ContactStrip from '../components/ContactStrip.astro';
+import { site } from '../data/site';
+
+const steps = [
+  { n: '01', title: 'Dough', body: 'Fresh dough is prepared and rested for the perfect soft, pliable wrapper.' },
+  { n: '02', title: 'Fill', body: 'Real, quality-tested ingredients are seasoned and filled by hand.' },
+  { n: '03', title: 'Fold', body: 'Each momo is hand-folded — the craft that gives every piece its shape.' },
+  { n: '04', title: 'Steam / Fry', body: 'Steamed to soft perfection (or fried golden) and frozen fresh to lock in taste.' },
+];
+
+const values = [
+  { icon: 'shield', title: 'Hygienic & quality-tested', body: 'Clean processes and quality-checked ingredients in every batch.' },
+  { icon: 'leaf', title: 'Real ingredients', body: 'No shortcuts — only real ingredients for honest, authentic taste.' },
+  { icon: 'truck', title: 'Timely delivery', body: 'Dependable, on-time supply that B2B partners can plan around.' },
+  { icon: 'heart', title: 'Built for the long term', body: 'We invest in lasting relationships, not one-off transactions.' },
+];
+---
+<BaseLayout
+  title="About — Yumme Momos Manufacturer"
+  description="Since 2019, Yumme Momos has made frozen veg & non-veg momos and French fries in Jamshedpur — hygienic, quality-tested, and crafted for authentic Himalayan flavour."
+>
+  <!-- Story -->
+  <section class="container-x py-12 md:py-16">
+    <div class="reveal grid gap-10 md:grid-cols-2 md:items-center">
+      <div>
+        <span class="eyebrow"><Icon name="star" size={16} /> Our story</span>
+        <h1 class="mt-3 text-4xl md:text-6xl">Made with care since {site.established}</h1>
+        <p class="mt-5 text-lg text-ink/75">
+          Yumme Momos Manufacturer began in {site.established} in Jamshedpur with a simple idea: convenient food that never compromises on taste or quality.
+        </p>
+        <p class="mt-4 text-ink/75">
+          Today we make Frozen Veg Momos, Frozen Non-Veg Momos and Frozen French Fries — cooked traditionally with native Himalayan herbs for a real Himalayan flavour. A dedicated team, quality-tested ingredients, hygienic processes and timely delivery let us build long-term relationships with retailers and partners, serving genuinely good food at reasonable rates.
+        </p>
+      </div>
+      <div class="relative mx-auto w-full max-w-md">
+        <div class="aspect-[4/5] rounded-[2rem] bg-gradient-to-br from-cream-deep to-fry-100 shadow-[var(--shadow-lift)]">
+          <div class="grid h-full place-items-center text-ink/20">
+            <!-- TODO: client team / kitchen photo -->
+            <div class="text-center">
+              <Icon name="factory" size={72} class="mx-auto" />
+              <p class="mt-2 text-sm">Team / kitchen photo slot</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vision & Mission -->
+  <section class="container-x py-8 md:py-12">
+    <div class="grid gap-5 md:grid-cols-2">
+      <div class="reveal sticker p-8">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-herb-50 text-herb"><Icon name="mountain" size={26} /></span>
+        <h2 class="mt-5 text-2xl">Our vision</h2>
+        <p class="mt-3 text-ink/75">{site.vision}</p>
+      </div>
+      <div class="reveal sticker p-8">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-chili-50 text-chili"><Icon name="sparkle" size={26} /></span>
+        <h2 class="mt-5 text-2xl">Our mission</h2>
+        <p class="mt-3 text-ink/75">{site.mission}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="container-x py-14 md:py-20">
+    <div class="reveal max-w-xl">
+      <span class="eyebrow"><Icon name="sparkle" size={16} /> How they’re made</span>
+      <h2 class="mt-3 text-3xl md:text-5xl">Handmade, the honest way</h2>
+      <p class="mt-3 text-ink/70">From dough to steam, every momo passes through four careful steps.</p>
+    </div>
+    <div class="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((s) => (
+        <div class="reveal sticker p-6">
+          <span class="font-display text-4xl text-chili/30">{s.n}</span>
+          <h3 class="mt-2 text-xl">{s.title}</h3>
+          <p class="mt-1.5 text-[0.95rem] text-ink/70">{s.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="container-x pb-14 md:pb-20">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {values.map((v) => (
+        <div class="reveal rounded-[var(--radius-card)] bg-cream-deep/40 p-6">
+          <span class="text-herb"><Icon name={v.icon} size={28} /></span>
+          <h3 class="mt-3 text-lg">{v.title}</h3>
+          <p class="mt-1.5 text-[0.95rem] text-ink/70">{v.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <ContactStrip />
+</BaseLayout>

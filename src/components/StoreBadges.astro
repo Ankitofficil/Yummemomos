@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+interface Props { class?: string; }
+const { class: cls = '' } = Astro.props;
+---
+<div class={`flex flex-wrap gap-3 ${cls}`}>
+  <a href={site.app.android} target="_blank" rel="noopener" aria-label="Get it on Google Play"
+     class="inline-flex items-center gap-3 rounded-xl bg-ink px-4 py-2.5 text-cream transition-transform hover:-translate-y-0.5">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3.6 2.3 13 12 3.6 21.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1zm11 8.3L6.9 3l9.5 5.5-1.8 2zM17.9 14l3-1.7c.8-.5.8-1.6 0-2l-3-1.8-2.2 2.2 2.2 2.3zm-3.6.3L6.9 21l9.4-5.4-2-2.3z"/>
+    </svg>
+    <span class="flex flex-col leading-none">
+      <span class="text-[0.65rem] opacity-80">GET IT ON</span>
+      <span class="text-sm font-semibold">Google Play</span>
+    </span>
+  </a>
+  <a href={site.app.ios} target="_blank" rel="noopener" aria-label="Download on the App Store"
+     class="inline-flex items-center gap-3 rounded-xl bg-ink px-4 py-2.5 text-cream transition-transform hover:-translate-y-0.5">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M16.4 12.7c0-2 1.6-3 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7s-1.6-.7-2.6-.7c-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.5 2 1 0 1.3-.6 2.5-.6s1.5.6 2.5.6 1.7-.9 2.4-1.9c.7-1 1-2 1-2 0-.1-1.8-.7-1.8-3zM14.5 6.3c.6-.7 1-1.6.9-2.6-.8 0-1.8.6-2.4 1.3-.5.6-1 1.5-.9 2.4.9.1 1.8-.4 2.4-1.1z"/>
+    </svg>
+    <span class="flex flex-col leading-none">
+      <span class="text-[0.65rem] opacity-80">Download on the</span>
+      <span class="text-sm font-semibold">App Store</span>
+    </span>
+  </a>
+</div>

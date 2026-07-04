@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yumme Momos — Before / After</title>
+<style>
+  body { font-family: system-ui, sans-serif; background:#fbf7f0; color:#231a16; margin:0; padding:2rem; }
+  h1 { font-size:2rem; }
+  .controls { margin:1rem 0 2rem; }
+  button { border:1px solid #231a16; background:#fff; border-radius:999px; padding:.5rem 1rem; margin-right:.5rem; cursor:pointer; font-weight:600; }
+  button.active { background:#e23a2e; color:#fff; border-color:#e23a2e; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:3rem; align-items:start; }
+  .row h2 { grid-column:1/-1; margin:0 0 .25rem; }
+  figure { margin:0; }
+  figcaption { font-size:.85rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#574c46; margin-bottom:.5rem; }
+  img { width:100%; border:1px solid rgba(35,26,22,.12); border-radius:12px; box-shadow:0 8px 24px -12px rgba(35,26,22,.25); background:#fff; }
+  .before img { border-color:#e23a2e33; }
+</style>
+</head>
+<body>
+<h1>Yumme Momos — Before / After</h1>
+<div class="controls">
+  <button data-w="mobile" class="active">Mobile (390px)</button>
+  <button data-w="desktop">Desktop (1440px)</button>
+</div>
+<div id="grid"></div>
+<script>
+  // [after-name, before-name, title]
+  const pages = [
+    ['home','home','Home'],
+    ['menu','menu','Menu / Products'],
+    ['about','about','About'],
+    ['franchise','franchise','Franchise / Become a Partner'],
+    ['achievements','achievement','Achievements'],
+    ['contact','reach','Contact / Reach Us'],
+    ['legal','terms','Legal & Terms'],
+  ];
+  const grid = document.getElementById('grid');
+  function render(w) {
+    grid.innerHTML = pages.map(([after, before, title]) => `
+      <div class="row">
+        <h2>${title}</h2>
+        <figure class="before">
+          <figcaption>Before — live Google Sites</figcaption>
+          <img loading="lazy" src="before/${before}-${w}.png" alt="Before ${title}">
+        </figure>
+        <figure class="after">
+          <figcaption>After — new build</figcaption>
+          <img loading="lazy" src="after/${after}-${w}.png" alt="After ${title}">
+        </figure>
+      </div>`).join('');
+  }
+  document.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    render(b.dataset.w);
+  }));
+  render('mobile');
+</script>
+</body>
+</html>

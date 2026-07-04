@@ -1,0 +1,41 @@
+---
+// Sticky bottom action bar — mobile only. The single biggest mobile
+// conversion win: Call · WhatsApp · Get App, all big thumb targets.
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+---
+<div
+  class="fixed inset-x-0 bottom-0 z-50 border-t border-ink/10 bg-cream/95 backdrop-blur-md lg:hidden"
+  style="padding-bottom: env(safe-area-inset-bottom);"
+>
+  <div class="grid grid-cols-3">
+    <a
+      href={`tel:+${site.phones[0].value}`}
+      class="flex min-h-[56px] flex-col items-center justify-center gap-0.5 py-2 text-ink"
+      aria-label="Call Yumme Momos"
+    >
+      <Icon name="phone" size={22} />
+      <span class="text-xs font-semibold">Call</span>
+    </a>
+    <a
+      href={site.whatsapp}
+      target="_blank"
+      rel="noopener"
+      class="flex min-h-[56px] flex-col items-center justify-center gap-0.5 bg-chili py-2 text-white"
+      aria-label="Order on WhatsApp"
+    >
+      <Icon name="whatsapp" size={22} />
+      <span class="text-xs font-semibold">WhatsApp</span>
+    </a>
+    <a
+      href={site.app.android}
+      target="_blank"
+      rel="noopener"
+      class="flex min-h-[56px] flex-col items-center justify-center gap-0.5 py-2 text-ink"
+      aria-label="Get the Yumme Momos app"
+    >
+      <Icon name="app" size={22} />
+      <span class="text-xs font-semibold">Get App</span>
+    </a>
+  </div>
+</div>

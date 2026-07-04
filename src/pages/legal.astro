@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const sections = [
+  { id: 'terms', label: 'Terms & Conditions' },
+  { id: 'banking', label: 'Banking details' },
+  { id: 'legal', label: 'Legal & registration' },
+];
+---
+<BaseLayout
+  title="Legal, Terms & Banking — Yumme Momos"
+  description="Terms & Conditions, order and shipping policy, banking and legal information for Yumme Momos Manufacturer, Jamshedpur."
+>
+  <section class="container-x py-12 md:py-16">
+    <div class="reveal max-w-2xl">
+      <span class="eyebrow"><Icon name="shield" size={16} /> Policies</span>
+      <h1 class="mt-3 text-4xl md:text-6xl">Legal &amp; Terms</h1>
+      <p class="mt-4 text-lg text-ink/75">
+        Terms of ordering, our shipping policy, and banking &amp; legal information — in one place.
+      </p>
+      <!-- Anchor nav -->
+      <nav class="mt-6 flex flex-wrap gap-2" aria-label="On this page">
+        {sections.map((s) => (
+          <a href={`#${s.id}`} class="rounded-full border border-ink/15 px-4 py-2 text-sm font-semibold text-ink/75 hover:border-chili hover:text-chili">{s.label}</a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="mt-12 grid max-w-3xl gap-10">
+      <!-- ===== TERMS (real content migrated verbatim in meaning) ===== -->
+      <section id="terms" class="reveal scroll-mt-24">
+        <h2 class="text-3xl">Terms &amp; Conditions</h2>
+
+        <h3 class="mt-6 text-xl">Shipping policy</h3>
+        <p class="mt-2 text-ink/75">Deliveries will take a minimum of 1 day.</p>
+
+        <h3 class="mt-6 text-xl">Order confirmation</h3>
+        <p class="mt-2 text-ink/75">
+          Your order confirmation is sent to the email or WhatsApp linked to your Yumme Momos order immediately upon placing your order. If you don’t receive it, please check your spam folder. For any order issues, contact us at
+          <a href={`mailto:${site.email}`} class="text-chili hover:underline">{site.email}</a> or
+          <a href={`tel:+${site.phones[0].value}`} class="text-chili hover:underline">{site.phones[0].label}</a> (call / WhatsApp).
+        </p>
+
+        <h3 class="mt-6 text-xl">Order status</h3>
+        <p class="mt-2 text-ink/75">
+          To check an order, open <em>Order History</em> in the Account section of the app. For any unresolved questions, reach us at
+          <a href={`mailto:${site.email}`} class="text-chili hover:underline">{site.email}</a> or
+          <a href={`tel:+${site.phones[0].value}`} class="text-chili hover:underline">{site.phones[0].label}</a>.
+        </p>
+
+        <div class="mt-6 rounded-xl border border-fry/40 bg-fry-100/40 p-4 text-sm text-ink/70">
+          <strong>TODO: client to provide</strong> — any additional terms (returns/refunds, cancellations, privacy policy) if required. The current live site lists only the shipping and order policies above.
+        </div>
+      </section>
+
+      <!-- ===== BANKING (live page had no banking content) ===== -->
+      <section id="banking" class="reveal scroll-mt-24">
+        <h2 class="text-3xl">Banking details</h2>
+        <div class="mt-3 rounded-xl border border-fry/40 bg-fry-100/40 p-5 text-ink/70">
+          <p><strong>TODO: client to provide.</strong> The live “Banking” page currently contains no published banking or payment details. Never share bank account numbers on a public page unless you intend to — confirm with the client what (if anything) should appear here, e.g. accepted payment methods or a UPI ID for B2B orders.</p>
+        </div>
+      </section>
+
+      <!-- ===== LEGAL / REGISTRATION (live page had no content) ===== -->
+      <section id="legal" class="reveal scroll-mt-24">
+        <h2 class="text-3xl">Legal &amp; registration</h2>
+        <p class="mt-2 text-ink/75">
+          {site.name}, {site.address.full}. Operating since {site.established}.
+        </p>
+        <div class="mt-3 rounded-xl border border-fry/40 bg-fry-100/40 p-5 text-ink/70">
+          <p><strong>TODO: client to provide</strong> — GST number, FSSAI licence number, and any business registration details. The live “Legal” page currently contains no registration content, so nothing has been fabricated here.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+</BaseLayout>

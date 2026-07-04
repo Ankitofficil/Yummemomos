@@ -1,0 +1,24 @@
+{
+  "name": "yumme-momos-website",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "screenshots:before": "node scripts/screenshots-before.mjs",
+    "screenshots:after": "node scripts/screenshots-after.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "playwright": "^1.49.1",
+    "tailwindcss": "^4.0.0"
+  }
+}

@@ -1,0 +1,156 @@
+---
+import { site, nav } from '../data/site';
+import Icon from './Icon.astro';
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-transparent transition-all duration-300"
+>
+  <div class="container-x flex items-center justify-between gap-4 py-3.5">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2.5" aria-label={`${site.name} — home`}>
+      <span class="grid h-10 w-10 place-items-center rounded-full bg-chili text-white shadow-[0_6px_16px_-6px_rgba(226,58,46,0.8)]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <path d="M4 14c0-3 3.5-5 8-5s8 2 8 5c0 2-2 3-8 3s-8-1-8-3zM8 9c0-1.5 1.8-3 4-3s4 1.5 4 3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="font-display text-xl font-semibold leading-none">
+        Yumme<span class="text-chili">Momos</span>
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'rounded-full px-3.5 py-2 text-[0.95rem] font-medium transition-colors',
+            isActive(item.href) ? 'text-chili' : 'text-ink/70 hover:text-ink',
+          ]}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href={site.whatsapp} target="_blank" rel="noopener" class="btn btn-primary hidden sm:inline-flex">
+        <Icon name="whatsapp" size={18} /> Order on WhatsApp
+      </a>
+      <!-- Mobile menu toggle -->
+      <button
+        id="nav-toggle"
+        class="grid h-11 w-11 place-items-center rounded-full border border-ink/15 text-ink lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="menu" size={24} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Full-screen mobile menu -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-[60] translate-x-full bg-cream transition-transform duration-300 ease-[var(--ease-out-soft)] lg:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site menu"
+  hidden
+>
+  <div class="container-x flex items-center justify-between py-3.5">
+    <span class="font-display text-xl font-semibold">Menu</span>
+    <button id="nav-close" class="grid h-11 w-11 place-items-center rounded-full border border-ink/15" aria-label="Close menu">
+      <Icon name="close" size={24} />
+    </button>
+  </div>
+  <nav class="container-x mt-4 flex flex-col gap-1" aria-label="Mobile">
+    {nav.map((item) => (
+      <a
+        href={item.href}
+        class:list={[
+          'rounded-2xl px-4 py-4 text-2xl font-display font-semibold transition-colors',
+          isActive(item.href) ? 'bg-white text-chili shadow-[var(--shadow-card)]' : 'text-ink hover:bg-white/60',
+        ]}
+      >
+        {item.label}
+      </a>
+    ))}
+    <a href="/legal" class="rounded-2xl px-4 py-4 text-lg text-ink/60">Legal &amp; Terms</a>
+  </nav>
+  <div class="container-x mt-6">
+    <a href={site.whatsapp} target="_blank" rel="noopener" class="btn btn-primary w-full text-lg">
+      <Icon name="whatsapp" size={20} /> Order on WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+  const header = document.getElementById('site-header');
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  const close = document.getElementById('nav-close');
+
+  // Condense header on scroll
+  const onScroll = () => {
+    if (!header) return;
+    if (window.scrollY > 12) {
+      header.classList.add('bg-cream/90', 'backdrop-blur-md', 'shadow-sm', 'border-ink/10');
+    } else {
+      header.classList.remove('bg-cream/90', 'backdrop-blur-md', 'shadow-sm', 'border-ink/10');
+    }
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu open/close with focus trap
+  let lastFocused: HTMLElement | null = null;
+  const focusable = () =>
+    menu ? Array.from(menu.querySelectorAll<HTMLElement>('a[href], button')) : [];
+
+  const openMenu = () => {
+    if (!menu) return;
+    lastFocused = document.activeElement as HTMLElement;
+    menu.hidden = false;
+    requestAnimationFrame(() => menu.classList.remove('translate-x-full'));
+    toggle?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    focusable()[0]?.focus();
+  };
+  const closeMenu = () => {
+    if (!menu) return;
+    menu.classList.add('translate-x-full');
+    toggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    setTimeout(() => (menu.hidden = true), 300);
+    lastFocused?.focus();
+  };
+
+  toggle?.addEventListener('click', openMenu);
+  close?.addEventListener('click', closeMenu);
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (e) => {
+    if (menu?.hidden) return;
+    if (e.key === 'Escape') closeMenu();
+    if (e.key === 'Tab') {
+      const items = focusable();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+</script>
