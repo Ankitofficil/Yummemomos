@@ -6,7 +6,7 @@ interface Props {
   class?: string;
 }
 const { veg, jain = false, class: cls = '' } = Astro.props;
-const color = veg ? 'var(--color-herb)' : 'var(--color-chili)';
+const color = veg ? 'var(--color-herb)' : 'var(--color-spice)';
 const label = jain ? 'Jain vegetarian' : veg ? 'Vegetarian' : 'Non-vegetarian';
 ---
 <span

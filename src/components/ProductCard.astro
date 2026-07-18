@@ -17,20 +17,31 @@ const orderHref = `${site.whatsapp}?text=${orderMsg}`;
 
 // Warm gradient placeholder tint, varied by veg/non-veg for visual rhythm.
 const tint = product.veg
-  ? 'linear-gradient(135deg,#eaf4ee,#ffedd6)'
-  : 'linear-gradient(135deg,#fbd6d3,#ffe9c2)';
+  ? 'linear-gradient(135deg,#eaf4ee,#fdf0c2)'
+  : 'linear-gradient(135deg,#ffdfc4,#ffe9c2)';
 ---
 <article class="sticker group flex flex-col overflow-hidden">
-  <!-- Image slot: client to supply hi-res photo (TODO). -->
+  <!-- Photo (uploaded via the admin panel) with placeholder fallback. -->
   <div
     class="relative aspect-[4/3] overflow-hidden"
     style={`background:${tint}`}
   >
-    <div class="absolute inset-0 grid place-items-center text-ink/25">
-      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
-        <path d="M4 14c0-3 3.5-5 8-5s8 2 8 5M4 14h16M4 14c0 2 2 3 8 3s8-1 8-3M8 9c0-1.5 1.8-3 4-3s4 1.5 4 3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+    {product.image ? (
+      <img
+        src={product.image}
+        alt={product.name}
+        loading="lazy"
+        width="480"
+        height="360"
+        class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    ) : (
+      <div class="absolute inset-0 grid place-items-center text-ink/25">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+          <path d="M4 14c0-3 3.5-5 8-5s8 2 8 5M4 14h16M4 14c0 2 2 3 8 3s8-1 8-3M8 9c0-1.5 1.8-3 4-3s4 1.5 4 3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    )}
     <div class="absolute left-3 top-3 rounded-full bg-white/85 px-2 py-1 backdrop-blur-sm">
       <VegBadge veg={product.veg} jain={product.jain} />
     </div>

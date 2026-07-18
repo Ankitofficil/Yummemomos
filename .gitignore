@@ -27,3 +27,9 @@ pnpm-debug.log*
 
 # generated screenshots (regenerate with `npm run screenshots:*`)
 screenshots/**/*.png
+
+# admin panel rolling backup of content.json
+src/data/content.backup.json
+
+# admin panel credentials (salted hash) — never commit
+admin.auth.json

@@ -3,6 +3,9 @@ import { site, nav } from '../data/site';
 import Icon from './Icon.astro';
 import StoreBadges from './StoreBadges.astro';
 
+// The local content studio only exists in `astro dev` — never link it in production.
+const isDev = import.meta.env.DEV;
+
 const socials = [
   { name: 'whatsapp', href: site.social.whatsapp, label: 'WhatsApp' },
   { name: 'facebook', href: site.social.facebook, label: 'Facebook' },
@@ -18,28 +21,28 @@ const socials = [
     <!-- Brand + contact -->
     <div>
       <div class="flex items-center gap-2.5">
-        <span class="grid h-10 w-10 place-items-center rounded-full bg-chili text-white">
+        <span class="grid h-10 w-10 place-items-center rounded-full bg-chili text-ink">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
             <path d="M4 14c0-3 3.5-5 8-5s8 2 8 5c0 2-2 3-8 3s-8-1-8-3zM8 9c0-1.5 1.8-3 4-3s4 1.5 4 3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </span>
-        <span class="font-display text-xl font-semibold">Yumme<span class="text-chili">Momos</span></span>
+        <span class="font-display text-xl font-semibold">Yumme<span class="text-chili-600">Momos</span></span>
       </div>
       <p class="mt-4 max-w-sm text-[0.95rem] text-ink/70">
         Frozen momos &amp; French fries, made hygienically in Jamshedpur since {site.established}. Real ingredients, honest taste, dependable B2B supply.
       </p>
       <address class="mt-5 space-y-2 not-italic text-[0.95rem] text-ink/75">
-        <p class="flex items-start gap-2"><Icon name="map" size={18} class="mt-0.5 shrink-0 text-chili" /> {site.address.full}</p>
-        <p class="flex items-center gap-2"><Icon name="clock" size={18} class="shrink-0 text-chili" /> {site.hours}</p>
+        <p class="flex items-start gap-2"><Icon name="map" size={18} class="mt-0.5 shrink-0 text-chili-600" /> {site.address.full}</p>
+        <p class="flex items-center gap-2"><Icon name="clock" size={18} class="shrink-0 text-chili-600" /> {site.hours}</p>
         <p class="flex items-center gap-2">
-          <Icon name="phone" size={18} class="shrink-0 text-chili" />
+          <Icon name="phone" size={18} class="shrink-0 text-chili-600" />
           {site.phones.map((p, i) => (
-            <>{i > 0 && <span> · </span>}<a href={`tel:+${p.value}`} class="hover:text-chili">{p.label}</a></>
+            <>{i > 0 && <span> · </span>}<a href={`tel:+${p.value}`} class="hover:text-chili-700">{p.label}</a></>
           ))}
         </p>
         <p class="flex items-center gap-2">
-          <Icon name="mail" size={18} class="shrink-0 text-chili" />
-          <a href={`mailto:${site.email}`} class="hover:text-chili">{site.email}</a>
+          <Icon name="mail" size={18} class="shrink-0 text-chili-600" />
+          <a href={`mailto:${site.email}`} class="hover:text-chili-700">{site.email}</a>
         </p>
       </address>
     </div>
@@ -49,9 +52,9 @@ const socials = [
       <h3 class="text-sm font-bold uppercase tracking-widest text-ink/50">Explore</h3>
       <ul class="mt-4 space-y-2.5 text-[0.95rem]">
         {nav.map((item) => (
-          <li><a href={item.href} class="text-ink/75 hover:text-chili">{item.label}</a></li>
+          <li><a href={item.href} class="text-ink/75 hover:text-chili-700">{item.label}</a></li>
         ))}
-        <li><a href="/legal" class="text-ink/75 hover:text-chili">Legal &amp; Terms</a></li>
+        <li><a href="/legal" class="text-ink/75 hover:text-chili-700">Legal &amp; Terms</a></li>
       </ul>
     </nav>
 
@@ -63,7 +66,7 @@ const socials = [
       <div class="mt-4 flex flex-wrap gap-2.5">
         {socials.map((s) => (
           <a href={s.href} target="_blank" rel="noopener" aria-label={s.label}
-             class="grid h-11 w-11 place-items-center rounded-full border border-ink/15 text-ink/70 transition-colors hover:border-chili hover:text-chili">
+             class="grid h-11 w-11 place-items-center rounded-full border border-ink/15 text-ink/70 transition-colors hover:border-chili-600 hover:text-chili-700">
             <Icon name={s.name} size={20} />
           </a>
         ))}
@@ -74,7 +77,14 @@ const socials = [
   <div class="border-t border-ink/10">
     <div class="container-x flex flex-col items-center justify-between gap-2 py-6 text-sm text-ink/60 sm:flex-row">
       <p>© 2019–2026 {site.name}. All Rights Reserved.</p>
-      <p>Made with care in Jamshedpur, Jharkhand.</p>
+      <p class="flex items-center gap-3">
+        Made with care in Jamshedpur, Jharkhand.
+        {isDev && (
+          <a href="/admin" class="rounded-full border border-ink/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-chili-700 hover:border-chili-600 hover:bg-chili-50">
+            ⚙ Admin
+          </a>
+        )}
+      </p>
     </div>
   </div>
 </footer>

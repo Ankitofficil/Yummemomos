@@ -1,81 +1,12 @@
 // =============================================================================
 // Yumme Momos — single source of truth for all editable content.
-// The client can update phones, address, products, awards, and copy here
-// without touching any component markup.
+// Editable content lives in ./content.json and is managed through the local
+// admin panel: run `npm run admin` (or `npm run dev` and open /admin).
+// This module re-exports it with types so component imports stay unchanged.
 // =============================================================================
 
-export const site = {
-  name: 'Yumme Momos Manufacturer',
-  shortName: 'Yumme Momos',
-  tagline: 'Love momo? You’ll never have just one.',
-  established: 2019,
-  description:
-    'B2B & franchise frozen-food maker from Jamshedpur — frozen veg momos, non-veg momos and French fries, made hygienically with real, quality-tested ingredients.',
+import content from './content.json';
 
-  // --- Contact ---
-  phones: [
-    { label: '9142081374', value: '919142081374', note: '24×7' },
-    { label: '7209412954', value: '917209412954', note: '24×7' },
-  ],
-  email: 'yummemomo2020@gmail.com',
-  address: {
-    line1: 'Bagun Nagar, Behind AIWC School',
-    line2: 'Near Church, Baridih',
-    city: 'Jamshedpur',
-    state: 'Jharkhand',
-    pincode: '831017',
-    full: 'Bagun Nagar, Behind AIWC School, Near Church, Baridih, Jamshedpur, Jharkhand — 831017',
-  },
-  hours: 'Mon–Sun · 9:30 AM – 7:30 PM · 365 days (special holidays only)',
-  geo: { lat: 22.7868, lng: 86.2029 }, // TODO: client to confirm exact coordinates
-
-  // --- Primary conversion links ---
-  whatsapp: 'https://wa.me/919142081374',
-  whatsappFranchise: [
-    'https://wa.me/919142081374',
-    'https://wa.me/917873282812',
-  ],
-
-  app: {
-    android:
-      'https://play.google.com/store/apps/details?id=com.yummeuserapp.app',
-    ios: 'https://apps.apple.com/in/app/yumme-momos-app/id6504599618',
-  },
-
-  // --- Social ---
-  social: {
-    whatsapp: 'https://wa.me/919142081374',
-    facebook: 'https://www.facebook.com/YummeMomo2020/',
-    youtube: 'https://youtube.com/@yummemomo7550',
-    instagram: '', // TODO: client to provide clean Instagram handle URL
-    google: 'https://g.co/kgs/5iSGFkQ',
-  },
-
-  vision:
-    'Enabling and empowering individuals in transforming societies by serving convenient food that saves time and builds reliability and simplicity — created in an agile, innovative, trusted work environment backed by simple, sustainable systems.',
-  mission: 'To deliver convenience in the daily food experience.',
-};
-
-// --- Home pillars ---
-export const pillars = [
-  {
-    icon: 'heart',
-    title: 'Delicious Food',
-    body: 'Love momo? You’ll never have just one. Every bite is made to keep you coming back.',
-  },
-  {
-    icon: 'mountain',
-    title: 'Authentic Taste',
-    body: 'Cooked traditionally with native Himalayan herbs for a real, honest Himalayan flavour.',
-  },
-  {
-    icon: 'leaf',
-    title: 'Real Ingredients',
-    body: 'Only real, quality-tested ingredients — for the freshest, most authentic taste in every batch.',
-  },
-];
-
-// --- Products ---
 export type Product = {
   slug: string;
   name: string;
@@ -83,121 +14,18 @@ export type Product = {
   jain?: boolean;
   desc: string;
   featured?: boolean;
+  /** Site-root path, e.g. /images/uploads/veg-momo.jpg (set via the admin panel) */
+  image?: string;
 };
 
-export const products: Product[] = [
-  {
-    slug: 'veg-momo',
-    name: 'Veg Momo',
-    veg: true,
-    desc: 'Classic garden-fresh vegetables, hand-folded and steamed to soft perfection.',
-    featured: true,
-  },
-  {
-    slug: 'chicken-momo',
-    name: 'Chicken Momo',
-    veg: false,
-    desc: 'Juicy, well-spiced minced chicken filling in a delicate steamed wrapper.',
-    featured: true,
-  },
-  {
-    slug: 'paneer-corn-momo',
-    name: 'Paneer Corn Momo',
-    veg: true,
-    desc: 'Creamy paneer and sweet corn — a rich, satisfying vegetarian favourite.',
-    featured: true,
-  },
-  {
-    slug: 'jain-veg-momo',
-    name: 'Jain Veg Momo',
-    veg: true,
-    jain: true,
-    desc: 'Onion & garlic-free, made to Jain preferences without compromising on taste.',
-  },
-  {
-    slug: 'cheese-corn-momo',
-    name: 'Cheese Corn Momo',
-    veg: true,
-    desc: 'Melty cheese and sweet corn — gooey, indulgent and irresistibly moreish.',
-    featured: true,
-  },
-  {
-    slug: 'fish-momo',
-    name: 'Fish Momo',
-    veg: false,
-    desc: 'Tender, delicately seasoned fish filling for a fresh coastal twist.',
-  },
-  {
-    slug: 'mushroom-momo',
-    name: 'Mushroom Momo',
-    veg: true,
-    desc: 'Earthy sautéed mushrooms with herbs — deep, savoury and wholesome.',
-  },
-  {
-    slug: 'mutton-momo',
-    name: 'Mutton Momo',
-    veg: false,
-    desc: 'Robust, richly spiced mutton for those who love a hearty, bold bite.',
-    featured: true,
-  },
-  {
-    slug: 'french-fries',
-    name: 'Frozen French Fries',
-    veg: true,
-    desc: 'Golden, crisp-cut fries — the perfect crunchy companion to any momo.',
-    featured: true,
-  },
-];
+export const site = content.site;
+export const pillars = content.pillars;
+export const products: Product[] = content.products;
+export const awards = content.awards;
+export const videos = content.videos;
+export const faqs = content.faqs;
 
-// --- Awards ---
-export const awards = [
-  {
-    title: 'Best Momo Manufacturer in Jharkhand',
-    by: 'Awarded by Jayaparda',
-    date: '10 Aug 2025',
-    iso: '2025-08-10',
-  },
-  {
-    title: 'Best Momo Manufacturer',
-    by: 'Awarded by (MLA) Purnima Das',
-    date: '14 Apr 2026',
-    iso: '2026-04-14',
-  },
-];
-
-// --- Video gallery (lazy lite-youtube) ---
-export const videos = [
-  { id: 'GLTA4wImT4I', title: 'Yumme Momos — Short' },
-  { id: 'MJlwK2IOvR8', title: 'Yumme Momos — Feature' },
-  { id: 'Lfjxnwbjxs8', title: 'Yumme Momos — Press' },
-  { id: 'cZOXQCvghfA', title: 'Yumme Momos — Story' },
-];
-
-// --- FAQ (answers marked TODO where client must confirm facts) ---
-export const faqs = [
-  {
-    q: 'How do I place an order?',
-    a: 'The fastest way is WhatsApp or a call — tap “Order on WhatsApp” or ring us on 9142081374 / 7209412954. You can also order and book through the Yumme Momos app.',
-  },
-  {
-    q: 'Which areas do you deliver to?',
-    a: 'TODO: client to confirm delivery coverage (Jamshedpur & regional area).',
-  },
-  {
-    q: 'Is there a minimum order quantity (MOQ) for B2B / retailers?',
-    a: 'TODO: client to confirm B2B minimum order quantity and bulk pricing.',
-  },
-  {
-    q: 'How long does delivery take?',
-    a: 'Deliveries take a minimum of 1 day. You’ll get an order confirmation on the email or WhatsApp linked to your order.',
-  },
-  {
-    q: 'How does a franchise / stockist partnership work?',
-    a: 'Share your details through the enquiry form or WhatsApp us directly — our team will walk you through products, terms and next steps. TODO: client to confirm franchise investment & terms.',
-  },
-];
-
-// --- Navigation ---
+// --- Navigation (structural — edit here, not in the admin panel) ---
 export const nav = [
   { label: 'Home', href: '/' },
   { label: 'Menu', href: '/menu' },

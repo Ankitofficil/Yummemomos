@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Yumme Momos — Admin</title>
+<style>
+  :root {
+    --cream: #fffaeb; --cream-deep: #fdf0c2;
+    --yellow: #fdc500; --yellow-light: #ffdd40; --gold: #ca8a04; --gold-dark: #8f6400;
+    --ink: #2b1508; --ink-70: #5d4433; --ink-40: #a08a7a;
+    --herb: #2f7d48; --spice: #c62b21;
+    --radius: 1rem;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0; background: var(--cream); color: var(--ink);
+    font: 16px/1.55 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', ui-serif, Georgia, serif; line-height: 1.1; margin: 0; }
+
+  header {
+    position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 14px;
+    padding: 14px 22px; background: rgba(255, 250, 235, 0.92); backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--ink);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: Georgia, serif; font-weight: 700; font-size: 1.15rem; }
+  .logo .dot { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 999px; background: var(--yellow); border: 2px solid var(--ink); }
+  .logo em { font-style: normal; color: var(--gold); }
+  .muted { color: var(--ink-70); font-size: 0.85rem; }
+  header .spacer { flex: 1; }
+  #status { font-size: 0.85rem; font-weight: 600; }
+  #status.ok { color: var(--herb); }
+  #status.err { color: var(--spice); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; border: 2px solid var(--ink);
+    border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer; background: #fff; color: var(--ink); text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: linear-gradient(115deg, var(--yellow) 20%, var(--yellow-light)); box-shadow: 3px 3px 0 0 var(--ink); }
+  .btn-ghost { background: transparent; }
+  .btn-sm { padding: 4px 12px; font-size: 0.8rem; border-width: 1.5px; }
+  .btn-danger { color: var(--spice); border-color: var(--spice); }
+
+  nav.tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 22px 0; max-width: 1080px; margin: 0 auto; }
+  nav.tabs button {
+    border: 2px solid var(--ink); background: #fff; border-radius: 999px; padding: 8px 18px;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer; color: var(--ink-70);
+  }
+  nav.tabs button.active { background: var(--yellow); color: var(--ink); box-shadow: 3px 3px 0 0 var(--ink); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 20px 22px 90px; }
+  .hint { margin: 4px 0 18px; color: var(--ink-70); font-size: 0.9rem; }
+
+  .card {
+    background: #fff; border: 2px solid var(--ink); border-radius: var(--radius);
+    box-shadow: 4px 4px 0 0 var(--ink); padding: 18px 20px; margin-bottom: 16px;
+  }
+  .card h3 { font-size: 1.05rem; margin-bottom: 10px; }
+  .grid { display: grid; gap: 12px; }
+  .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 720px) { .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; } }
+
+  label.field { display: block; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-dark); }
+  label.field input[type="text"], label.field input[type="number"], label.field input[type="password"], label.field textarea, label.field select {
+    display: block; width: 100%; margin-top: 4px; padding: 9px 12px; font: inherit; color: var(--ink);
+    background: var(--cream); border: 1.5px solid rgba(43, 21, 8, 0.25); border-radius: 10px;
+  }
+  label.field textarea { resize: vertical; min-height: 64px; }
+  label.field input:focus, label.field textarea:focus, label.field select:focus {
+    outline: none; border-color: var(--gold); background: #fff;
+  }
+  label.check { display: inline-flex; align-items: center; gap: 7px; font-size: 0.9rem; font-weight: 600; margin-right: 16px; cursor: pointer; }
+  label.check input { width: 17px; height: 17px; accent-color: var(--gold); }
+
+  .row-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .row-head .tag {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1.5px solid; border-radius: 999px; padding: 2px 10px;
+  }
+  .tag.veg { color: var(--herb); border-color: var(--herb); }
+  .tag.nonveg { color: var(--spice); border-color: var(--spice); }
+  .tag.feat { color: var(--gold-dark); border-color: var(--gold); background: #fefce8; }
+  .row-head .spacer { flex: 1; }
+
+  .add-bar { margin: 6px 0 22px; }
+  .empty { color: var(--ink-40); font-style: italic; }
+
+  .img-row { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+  .thumb {
+    width: 96px; height: 72px; object-fit: cover; border-radius: 10px;
+    border: 1.5px solid rgba(43, 21, 8, 0.25); background: var(--cream);
+  }
+  .thumb.none { display: grid; place-items: center; color: var(--ink-40); font-size: 1.4rem; }
+  .img-note { font-size: 0.8rem; color: var(--ink-70); }
+
+  /* --- phone layout --- */
+  @media (max-width: 700px) {
+    /* solid header: backdrop-filter would trap the fixed Save bar inside it */
+    header { flex-wrap: wrap; padding: 10px 14px; gap: 8px; row-gap: 8px; backdrop-filter: none; background: var(--cream); }
+    header .spacer { display: none; }
+    .logo { flex: 1 1 100%; }
+    .logo .muted { display: block; margin-left: 48px; margin-top: -6px; }
+    header .btn { padding: 7px 12px; font-size: 0.82rem; }
+    #status { order: 9; flex-basis: 100%; text-align: center; }
+    #status:empty { display: none; }
+
+    /* Save becomes a fixed thumb-reach bar; header keeps the small actions */
+    #save {
+      position: fixed; bottom: 12px; left: 14px; right: 14px; z-index: 40;
+      justify-content: center; padding: 13px 18px; font-size: 1rem;
+      box-shadow: 4px 4px 0 0 var(--ink);
+    }
+
+    nav.tabs { padding: 12px 14px 0; gap: 6px; }
+    nav.tabs button { padding: 7px 13px; font-size: 0.82rem; }
+    main { padding: 16px 14px 96px; }
+    .card { padding: 14px 14px; }
+    .row-head { flex-wrap: wrap; row-gap: 6px; }
+    .img-row { flex-wrap: wrap; }
+  }
+
+  .auth-overlay {
+    position: fixed; inset: 0; z-index: 50; display: grid; place-items: center;
+    background: rgba(43, 21, 8, 0.5); backdrop-filter: blur(5px);
+  }
+  .auth-overlay[hidden] { display: none; }
+  .auth-card {
+    width: min(92vw, 400px); background: #fff; border: 2px solid var(--ink);
+    border-radius: var(--radius); box-shadow: 6px 6px 0 0 var(--ink); padding: 28px;
+  }
+  .auth-card .dot { margin: 0 auto 10px; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 999px; background: var(--yellow); border: 2px solid var(--ink); font-size: 1.5rem; }
+  .auth-card h2 { font-size: 1.45rem; text-align: center; }
+  .auth-card .sub { text-align: center; margin: 6px 0 4px; color: var(--ink-70); font-size: 0.9rem; }
+  .auth-card .field { margin-top: 14px; }
+  .auth-card input { font-size: 1rem; }
+  #auth-error { color: var(--spice); font-weight: 600; font-size: 0.88rem; min-height: 1.3em; margin: 12px 0 0; text-align: center; }
+  .auth-card button[type="submit"] { width: 100%; margin-top: 12px; justify-content: center; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo"><span class="dot">🥟</span> Yumme<em>Momos</em>&nbsp;<span class="muted">Content Studio</span></span>
+  <span class="spacer"></span>
+  <span id="status" role="status"></span>
+  <a class="btn btn-ghost" href="/" target="_blank" rel="noopener">View site ↗</a>
+  <button class="btn btn-primary" id="save">💾 Save changes</button>
+  <button class="btn btn-ghost" id="logout" title="Log out" hidden>Log out</button>
+  <button class="btn btn-ghost btn-danger" id="delete-account" title="Delete the admin account" hidden>Delete account</button>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+<main>
+  <p class="hint" id="hint"></p>
+  <div id="panel"></div>
+</main>
+<input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" hidden />
+
+<div class="auth-overlay" id="auth" hidden>
+  <form class="auth-card" id="auth-form">
+    <div class="dot">🥟</div>
+    <h2 id="auth-title">Log in</h2>
+    <p class="sub" id="auth-sub"></p>
+    <label class="field">Username
+      <input type="text" id="auth-user" autocomplete="username" required minlength="3" />
+    </label>
+    <label class="field">Password
+      <input type="password" id="auth-pass" autocomplete="current-password" required minlength="6" />
+    </label>
+    <label class="field" id="auth-confirm-wrap" hidden>Confirm password
+      <input type="password" id="auth-confirm" autocomplete="new-password" />
+    </label>
+    <p id="auth-error" role="alert"></p>
+    <button class="btn btn-primary" type="submit" id="auth-submit">Log in</button>
+  </form>
+</div>
+
+
+<script>
+(() => {
+  'use strict';
+  const TABS = [
+    ['products', '🥟 Products'],
+    ['awards', '🏆 Awards'],
+    ['faqs', '❓ FAQs'],
+    ['videos', '▶ Videos'],
+    ['pillars', '✨ Pillars'],
+    ['site', '⚙ Site & contact'],
+  ];
+  const HINTS = {
+    products: 'Items shown on the Menu page. “Featured” items also appear on the home page (first 6). Slug is the internal id — lowercase letters, numbers and dashes.',
+    awards: 'Shown on the Achievements page and the home-page awards panel. “ISO date” (YYYY-MM-DD) controls ordering metadata.',
+    faqs: 'Shown on the Contact page.',
+    videos: 'YouTube videos on the Achievements page. The ID is the part after “watch?v=” in a YouTube URL.',
+    pillars: 'The three promise cards on the home page. Icon is one of the site’s icon names (heart, mountain, leaf, star, sparkle…).',
+    site: 'Contact details, links and brand copy used across every page. Save, then check the running site — it reloads automatically.',
+  };
+
+  let state = null;
+  let dirty = false;
+  let tab = 'products';
+  let token = sessionStorage.getItem('adminToken') || '';
+  let setupMode = false;
+  let pendingImageIndex = null;
+
+  const $ = (s) => document.querySelector(s);
+  const esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const get = (o, p) => p.split('.').reduce((a, k) => (a == null ? a : a[k]), o);
+  const set = (o, p, v) => { const ks = p.split('.'); const last = ks.pop(); ks.reduce((a, k) => a[k], o)[last] = v; };
+  const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'item';
+
+  function setStatus(msg, cls = '') {
+    const el = $('#status');
+    el.textContent = msg;
+    el.className = cls;
+  }
+  function markDirty() {
+    if (!dirty) { dirty = true; setStatus('Unsaved changes'); }
+  }
+
+  // ---------- field helpers ----------
+  const text = (label, path, opts = {}) =>
+    `<label class="field">${esc(label)}
+       <${opts.area ? 'textarea' : 'input type="text"'} data-path="${esc(path)}" ${opts.mono ? 'spellcheck="false"' : ''}
+       ${opts.area ? `>${esc(get(state, path))}</textarea>` : `value="${esc(get(state, path))}" />`}
+     </label>`;
+  const check = (label, path) =>
+    `<label class="check"><input type="checkbox" data-path="${esc(path)}" data-type="bool" ${get(state, path) ? 'checked' : ''}/> ${esc(label)}</label>`;
+  const itemButtons = (list, i) => `
+    <button class="btn btn-sm" data-action="move" data-list="${list}" data-i="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>↑</button>
+    <button class="btn btn-sm" data-action="move" data-list="${list}" data-i="${i}" data-dir="1" ${i === get(state, list).length - 1 ? 'disabled' : ''}>↓</button>
+    <button class="btn btn-sm btn-danger" data-action="del" data-list="${list}" data-i="${i}">Delete</button>`;
+
+  // ---------- renderers ----------
+  const render = {
+    products() {
+      const cards = state.products.map((p, i) => `
+        <div class="card">
+          <div class="row-head">
+            <span class="tag ${p.veg ? 'veg' : 'nonveg'}">${p.veg ? (p.jain ? 'Jain veg' : 'Veg') : 'Non-veg'}</span>
+            ${p.featured ? '<span class="tag feat">Featured</span>' : ''}
+            <span class="spacer"></span>
+            ${itemButtons('products', i)}
+          </div>
+          <div class="grid cols-2">
+            ${text('Name', `products.${i}.name`)}
+            ${text('Slug', `products.${i}.slug`, { mono: true })}
+          </div>
+          <div style="margin-top:12px">${text('Description', `products.${i}.desc`, { area: true })}</div>
+          <div class="img-row">
+            ${p.image
+              ? `<img class="thumb" src="${esc(p.image)}" alt="" />`
+              : '<span class="thumb none">🥟</span>'}
+            <button class="btn btn-sm" data-action="pick-image" data-i="${i}">📷 ${p.image ? 'Replace' : 'Upload'} photo…</button>
+            ${p.image ? `<button class="btn btn-sm btn-danger" data-action="clear-image" data-i="${i}">Remove</button>` : ''}
+            <span class="img-note">${p.image ? esc(p.image) : 'No photo yet — the site shows a placeholder.'}</span>
+          </div>
+          <div style="margin-top:12px">
+            ${check('Vegetarian', `products.${i}.veg`)}
+            ${check('Jain', `products.${i}.jain`)}
+            ${check('Featured on home page', `products.${i}.featured`)}
+          </div>
+        </div>`).join('');
+      return `<div class="add-bar"><button class="btn btn-primary" data-action="add-product">＋ Add product</button></div>
+              ${cards || '<p class="empty">No products yet.</p>'}`;
+    },
+
+    awards() {
+      const cards = state.awards.map((a, i) => `
+        <div class="card">
+          <div class="row-head"><span class="spacer"></span>${itemButtons('awards', i)}</div>
+          ${text('Title', `awards.${i}.title`)}
+          <div class="grid cols-3" style="margin-top:12px">
+            ${text('Awarded by', `awards.${i}.by`)}
+            ${text('Display date', `awards.${i}.date`)}
+            ${text('ISO date (YYYY-MM-DD)', `awards.${i}.iso`, { mono: true })}
+          </div>
+        </div>`).join('');
+      return `<div class="add-bar"><button class="btn btn-primary" data-action="add" data-list="awards" data-tpl='{"title":"","by":"","date":"","iso":""}'>＋ Add award</button></div>
+              ${cards || '<p class="empty">No awards yet.</p>'}`;
+    },
+
+    faqs() {
+      const cards = state.faqs.map((f, i) => `
+        <div class="card">
+          <div class="row-head"><span class="spacer"></span>${itemButtons('faqs', i)}</div>
+          ${text('Question', `faqs.${i}.q`)}
+          <div style="margin-top:12px">${text('Answer', `faqs.${i}.a`, { area: true })}</div>
+        </div>`).join('');
+      return `<div class="add-bar"><button class="btn btn-primary" data-action="add" data-list="faqs" data-tpl='{"q":"","a":""}'>＋ Add FAQ</button></div>${cards}`;
+    },
+
+    videos() {
+      const cards = state.videos.map((v, i) => `
+        <div class="card">
+          <div class="row-head"><span class="spacer"></span>${itemButtons('videos', i)}</div>
+          <div class="grid cols-2">
+            ${text('YouTube ID', `videos.${i}.id`, { mono: true })}
+            ${text('Title', `videos.${i}.title`)}
+          </div>
+        </div>`).join('');
+      return `<div class="add-bar"><button class="btn btn-primary" data-action="add" data-list="videos" data-tpl='{"id":"","title":""}'>＋ Add video</button></div>${cards}`;
+    },
+
+    pillars() {
+      return state.pillars.map((p, i) => `
+        <div class="card">
+          <div class="grid cols-2">
+            ${text('Title', `pillars.${i}.title`)}
+            ${text('Icon name', `pillars.${i}.icon`, { mono: true })}
+          </div>
+          <div style="margin-top:12px">${text('Body', `pillars.${i}.body`, { area: true })}</div>
+        </div>`).join('');
+    },
+
+    site() {
+      const phones = state.site.phones.map((p, i) => `
+        <div class="card">
+          <div class="row-head"><h3>Phone ${i + 1}</h3><span class="spacer"></span>
+            <button class="btn btn-sm btn-danger" data-action="del" data-list="site.phones" data-i="${i}" ${state.site.phones.length < 2 ? 'disabled' : ''}>Delete</button>
+          </div>
+          <div class="grid cols-3">
+            ${text('Shown as', `site.phones.${i}.label`)}
+            ${text('Dial value (with country code)', `site.phones.${i}.value`, { mono: true })}
+            ${text('Note', `site.phones.${i}.note`)}
+          </div>
+        </div>`).join('');
+      return `
+        <div class="card"><h3>Brand</h3>
+          <div class="grid cols-2">
+            ${text('Business name', 'site.name')}
+            ${text('Short name', 'site.shortName')}
+          </div>
+          <div style="margin-top:12px">${text('Tagline', 'site.tagline')}</div>
+          <div style="margin-top:12px">${text('Meta description', 'site.description', { area: true })}</div>
+          <div class="grid cols-2" style="margin-top:12px">
+            ${text('Vision', 'site.vision', { area: true })}
+            ${text('Mission', 'site.mission', { area: true })}
+          </div>
+        </div>
+        ${phones}
+        <div class="add-bar"><button class="btn" data-action="add" data-list="site.phones" data-tpl='{"label":"","value":"","note":""}'>＋ Add phone</button></div>
+        <div class="card"><h3>Contact</h3>
+          <div class="grid cols-2">
+            ${text('Email', 'site.email', { mono: true })}
+            ${text('Opening hours', 'site.hours')}
+          </div>
+          <div class="grid cols-2" style="margin-top:12px">
+            ${text('Address line 1', 'site.address.line1')}
+            ${text('Address line 2', 'site.address.line2')}
+          </div>
+          <div class="grid cols-3" style="margin-top:12px">
+            ${text('City', 'site.address.city')}
+            ${text('State', 'site.address.state')}
+            ${text('PIN code', 'site.address.pincode', { mono: true })}
+          </div>
+          <div style="margin-top:12px">${text('Full address (as displayed)', 'site.address.full', { area: true })}</div>
+        </div>
+        <div class="card"><h3>Links</h3>
+          <div class="grid cols-2">
+            ${text('WhatsApp (orders)', 'site.whatsapp', { mono: true })}
+            ${text('WhatsApp (franchise #1)', 'site.whatsappFranchise.0', { mono: true })}
+            ${text('WhatsApp (franchise #2)', 'site.whatsappFranchise.1', { mono: true })}
+            ${text('Android app', 'site.app.android', { mono: true })}
+            ${text('iOS app', 'site.app.ios', { mono: true })}
+            ${text('Facebook', 'site.social.facebook', { mono: true })}
+            ${text('YouTube', 'site.social.youtube', { mono: true })}
+            ${text('Instagram (optional)', 'site.social.instagram', { mono: true })}
+            ${text('Google listing', 'site.social.google', { mono: true })}
+            ${text('WhatsApp (social)', 'site.social.whatsapp', { mono: true })}
+          </div>
+        </div>`;
+    },
+  };
+
+  function renderTabs() {
+    $('#tabs').innerHTML = TABS.map(([id, label]) =>
+      `<button data-tab="${id}" class="${id === tab ? 'active' : ''}">${label}</button>`).join('');
+  }
+  function renderPanel() {
+    $('#hint').textContent = HINTS[tab];
+    $('#panel').innerHTML = render[tab]();
+  }
+
+  // ---------- events ----------
+  document.addEventListener('input', (e) => {
+    const path = e.target.dataset?.path;
+    if (!path) return;
+    const val = e.target.dataset.type === 'bool' ? e.target.checked : e.target.value;
+    set(state, path, val);
+    markDirty();
+  });
+  document.addEventListener('change', (e) => {
+    // re-render product cards when badges (veg/jain/featured) change
+    if (e.target.dataset?.type === 'bool' && tab === 'products') renderPanel();
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    if (btn.dataset.tab) { tab = btn.dataset.tab; renderTabs(); renderPanel(); return; }
+
+    const { action, list, i, dir, tpl } = btn.dataset;
+    if (!action) return;
+    if (action === 'pick-image') {
+      pendingImageIndex = +i;
+      $('#file-input').click();
+      return;
+    }
+    if (action === 'clear-image') {
+      delete state.products[+i].image;
+      markDirty();
+      renderPanel();
+      return;
+    }
+    if (action === 'add-product') {
+      const n = state.products.length + 1;
+      state.products.unshift({ slug: `new-momo-${n}`, name: 'New Momo', veg: true, desc: '', featured: false });
+    } else if (action === 'add') {
+      get(state, list).push(JSON.parse(tpl));
+    } else if (action === 'del') {
+      const arr = get(state, list);
+      const item = arr[+i];
+      if (!confirm(`Delete “${item.name || item.title || item.q || item.label || item.id || 'this item'}”?`)) return;
+      arr.splice(+i, 1);
+    } else if (action === 'move') {
+      const arr = get(state, list);
+      const j = +i + +dir;
+      [arr[+i], arr[j]] = [arr[j], arr[+i]];
+    } else {
+      return;
+    }
+    markDirty();
+    renderPanel();
+  });
+
+  $('#file-input').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file || pendingImageIndex == null) return;
+    setStatus('Uploading…');
+    try {
+      const headers = { 'x-filename': encodeURIComponent(file.name), 'x-admin-token': token };
+      const res = await fetch('/api/admin/upload', { method: 'POST', headers, body: file });
+      if (res.status === 401) {
+        showAuth(false, 'Session expired — log in to continue');
+        setStatus('');
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      state.products[pendingImageIndex].image = data.path;
+      markDirty();
+      renderPanel();
+      setStatus('Photo uploaded — remember to Save changes');
+    } catch (err) {
+      setStatus(`✗ ${err.message}`, 'err');
+    } finally {
+      pendingImageIndex = null;
+    }
+  });
+
+  async function api(method, body) {
+    const headers = { 'Content-Type': 'application/json', 'x-admin-token': token };
+    const res = await fetch('/api/admin/content', { method, headers, body });
+    if (res.status === 401) showAuth(false, 'Session expired — log in to continue');
+    return res;
+  }
+
+  // ---------- auth ----------
+  function showAuth(setup, message = '') {
+    setupMode = setup;
+    $('#auth-title').textContent = setup ? 'Create your admin account' : 'Log in';
+    $('#auth-sub').textContent = setup
+      ? 'First run — choose a username and password for this panel.'
+      : 'Enter your admin username and password.';
+    $('#auth-submit').textContent = setup ? 'Create account' : 'Log in';
+    $('#auth-confirm-wrap').hidden = !setup;
+    $('#auth-confirm').required = setup;
+    $('#auth-error').textContent = message;
+    $('#auth').hidden = false;
+    $('#logout').hidden = true;
+    $('#delete-account').hidden = true;
+    $('#auth-user').focus();
+  }
+  function hideAuth() {
+    $('#auth').hidden = true;
+    $('#logout').hidden = false;
+    $('#delete-account').hidden = false;
+    $('#auth-pass').value = '';
+    $('#auth-confirm').value = '';
+  }
+
+  $('#auth-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = $('#auth-user').value.trim();
+    const password = $('#auth-pass').value;
+    if (setupMode && password !== $('#auth-confirm').value) {
+      $('#auth-error').textContent = 'Passwords don’t match';
+      return;
+    }
+    $('#auth-error').textContent = '';
+    $('#auth-submit').disabled = true;
+    try {
+      const res = await fetch(setupMode ? '/api/admin/setup' : '/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      token = data.token;
+      sessionStorage.setItem('adminToken', token);
+      hideAuth();
+      if (!state) await loadContent();
+    } catch (err) {
+      $('#auth-error').textContent = err.message;
+    } finally {
+      $('#auth-submit').disabled = false;
+    }
+  });
+
+  $('#delete-account').addEventListener('click', async () => {
+    if (!confirm('Delete the admin account?\n\nThis removes the username and password for this panel. Your site content and photos are NOT affected. The next person to open /admin will be asked to create a new account.')) return;
+    const password = prompt('Type your password to confirm:');
+    if (password == null) return;
+    setStatus('Deleting account…');
+    try {
+      const res = await fetch('/api/admin/delete-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || res.statusText);
+      token = '';
+      sessionStorage.removeItem('adminToken');
+      dirty = false;
+      setStatus('');
+      showAuth(true, 'Account deleted — create a new one to continue.');
+    } catch (err) {
+      setStatus(`✗ ${err.message}`, 'err');
+    }
+  });
+
+  $('#logout').addEventListener('click', async () => {
+    if (dirty && !confirm('You have unsaved changes. Log out anyway?')) return;
+    await fetch('/api/admin/logout', { method: 'POST', headers: { 'x-admin-token': token } }).catch(() => {});
+    token = '';
+    sessionStorage.removeItem('adminToken');
+    dirty = false;
+    setStatus('');
+    showAuth(false);
+  });
+
+  $('#save').addEventListener('click', async () => {
+    // keep slugs tidy before validation
+    for (const p of state.products) p.slug = slugify(p.slug || p.name);
+    setStatus('Saving…');
+    try {
+      const res = await api('PUT', JSON.stringify(state));
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        dirty = false;
+        setStatus('✓ Saved — site reloads automatically', 'ok');
+      } else {
+        setStatus(`✗ ${data.error || res.statusText}`, 'err');
+      }
+    } catch (err) {
+      setStatus(`✗ ${err.message}`, 'err');
+    }
+  });
+
+  window.addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
+
+  // ---------- boot ----------
+  async function loadContent() {
+    setStatus('Loading…');
+    const res = await api('GET');
+    if (!res.ok) {
+      if (res.status !== 401) setStatus('✗ Could not load content', 'err');
+      else setStatus('');
+      return;
+    }
+    state = await res.json();
+    setStatus('');
+    renderTabs();
+    renderPanel();
+  }
+
+  (async () => {
+    const status = await fetch('/api/admin/status').then((r) => r.json()).catch(() => null);
+    if (!status) { setStatus('✗ Could not reach the dev server', 'err'); return; }
+    if (!status.setup) { showAuth(true); return; }
+    if (!token) { showAuth(false); return; }
+    hideAuth();
+    await loadContent();
+  })();
+})();
+</script>
+</body>
+</html>

@@ -1,32 +1,35 @@
 @import 'tailwindcss';
 
 /* ==========================================================================
-   Yumme Momos — Design Tokens · "Vibrant Street-Food" theme
-   Punchy chili→tangerine sunset gradients, bold display type, sticker
-   badges, wavy dividers, playful motion. Veg-green kept for FSSAI cues.
+   Yumme Momos — Design Tokens · "Golden Street-Food" theme
+   Sunny golden-yellow gradients, bold display type, sticker badges, wavy
+   dividers, playful motion. Ink text on yellow surfaces for contrast;
+   veg-green kept for FSSAI cues, spice-red kept for non-veg cues & accents.
    ========================================================================== */
 
 @theme {
   /* --- Brand color scale --- */
-  --color-cream: #fff8ef;
-  --color-cream-deep: #ffedd6;
+  --color-cream: #fffaeb;
+  --color-cream-deep: #fdf0c2;
 
-  --color-chili-50: #fdeceb;
-  --color-chili-100: #fbd6d3;
-  --color-chili-300: #ef8781;
-  --color-chili: #e23a2e; /* primary CTA / energy */
-  --color-chili-600: #c62b21;
-  --color-chili-700: #9e2019;
+  --color-chili-50: #fefce8;
+  --color-chili-100: #fdf3b3;
+  --color-chili-300: #fde047;
+  --color-chili: #fdc500; /* primary CTA / energy — golden yellow */
+  --color-chili-600: #ca8a04;
+  --color-chili-700: #8f6400;
 
-  --color-tang: #f26b1d; /* tangerine — gradient partner */
-  --color-tang-600: #d95a10;
+  --color-tang: #ffdd40; /* light gold — gradient partner */
+  --color-tang-600: #a16207;
 
   --color-herb-50: #eaf4ee;
   --color-herb: #2f7d48; /* fresh / veg cue */
   --color-herb-600: #256339;
 
-  --color-fry: #ffb52e; /* punchier golden highlight */
+  --color-fry: #ff9d1f; /* amber-orange highlight */
   --color-fry-100: #ffe9c2;
+
+  --color-spice: #c62b21; /* red accent — non-veg cue, small pops */
 
   --color-ink: #2b1508; /* warm espresso text */
   --color-ink-70: #5d4433;
@@ -39,7 +42,7 @@
   /* --- Radii & shadow --- */
   --radius-card: 1.5rem;
   --shadow-card: 0 10px 30px -12px rgba(43, 21, 8, 0.2);
-  --shadow-lift: 0 24px 50px -18px rgba(226, 58, 46, 0.35);
+  --shadow-lift: 0 24px 50px -18px rgba(202, 138, 4, 0.35);
   --shadow-pop: 0 6px 0 0 var(--color-ink);
 
   /* --- Easing --- */
@@ -78,7 +81,7 @@
   }
 
   :where(a, button, input, textarea, select, [tabindex]):focus-visible {
-    outline: 3px solid var(--color-chili);
+    outline: 3px solid var(--color-chili-600);
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -114,12 +117,12 @@
 
   .btn-primary {
     background-image: linear-gradient(115deg, var(--color-chili) 20%, var(--color-tang) 100%);
-    color: #fff;
-    box-shadow: 0 10px 24px -8px rgba(226, 58, 46, 0.75);
+    color: var(--color-ink);
+    box-shadow: 0 10px 24px -8px rgba(202, 138, 4, 0.65);
   }
   .btn-primary:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 16px 32px -10px rgba(226, 58, 46, 0.85);
+    box-shadow: 0 16px 32px -10px rgba(202, 138, 4, 0.8);
   }
 
   .btn-ghost {
@@ -149,16 +152,16 @@
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-chili-600);
+    color: var(--color-chili-700);
     transform: rotate(-1.5deg);
   }
 
-  /* Sunset gradient panel */
+  /* Golden gradient panel — ink text for contrast on yellow */
   .panel-sunset {
     background-image:
-      radial-gradient(120% 90% at 85% 10%, rgba(255, 181, 46, 0.55) 0%, transparent 55%),
-      linear-gradient(130deg, var(--color-chili) 10%, var(--color-tang) 75%, #f88b2e 100%);
-    color: #fff;
+      radial-gradient(120% 90% at 85% 10%, rgba(255, 244, 194, 0.75) 0%, transparent 55%),
+      linear-gradient(130deg, var(--color-chili) 10%, #ffd21a 60%, var(--color-tang) 100%);
+    color: var(--color-ink);
   }
 
   /* Sticker card — bold ink border + hard offset shadow */
@@ -238,7 +241,7 @@
   50% { background-position: 100% 50%; }
 }
 .text-sunset {
-  background-image: linear-gradient(100deg, var(--color-chili), var(--color-tang), var(--color-fry), var(--color-chili));
+  background-image: linear-gradient(100deg, var(--color-chili-600), var(--color-fry), var(--color-chili-700), var(--color-chili-600));
   background-size: 250% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -255,5 +258,5 @@
     scroll-behavior: auto !important;
   }
   .reveal { opacity: 1; transform: none; }
-  .text-sunset { color: var(--color-chili); background: none; }
+  .text-sunset { color: var(--color-chili-600); background: none; }
 }

@@ -21,35 +21,35 @@ const featured = products.filter((p) => p.featured).slice(0, 6);
       <path d="M12 0l1.8 7.1L19 2.5l-2.6 6.8 7.6-.9-6.4 4 6.4 3.6-7.5-.7 2.5 7.2-5.2-5-1.8 7.5-1.8-7.5-5.2 5 2.5-7.2-7.5.7 6.4-3.6-6.4-4 7.6.9L5 2.5l5.2 4.6z"/>
     </svg>
     <!-- floating momo doodles -->
-    <div class="float-bob-slow pointer-events-none absolute left-[6%] top-[14%] hidden text-white/25 lg:block" style="--bob-rot:-12deg">
+    <div class="float-bob-slow pointer-events-none absolute left-[6%] top-[14%] hidden text-ink/15 lg:block" style="--bob-rot:-12deg">
       <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 14c0-3 3.5-5 8-5s8 2 8 5c0 2-2 3-8 3s-8-1-8-3zM8 9c0-1.5 1.8-3 4-3s4 1.5 4 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <div class="float-bob pointer-events-none absolute bottom-[22%] left-[42%] hidden text-white/20 lg:block" style="--bob-rot:14deg">
+    <div class="float-bob pointer-events-none absolute bottom-[22%] left-[42%] hidden text-ink/10 lg:block" style="--bob-rot:14deg">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 14c0-3 3.5-5 8-5s8 2 8 5c0 2-2 3-8 3s-8-1-8-3zM8 9c0-1.5 1.8-3 4-3s4 1.5 4 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
 
     <div class="container-x grid items-center gap-12 py-16 md:grid-cols-2 md:py-24">
       <div class="reveal">
         <span class="eyebrow"><Icon name="star" size={16} /> Est. {site.established} · Jamshedpur</span>
-        <h1 class="mt-5 text-[2.7rem] leading-[1.02] text-white sm:text-6xl md:text-[4.2rem]">
+        <h1 class="mt-5 text-[2.7rem] leading-[1.02] text-ink sm:text-6xl md:text-[4.2rem]">
           Handmade momos,<br />
-          <span class="text-fry">steamed to perfection.</span>
+          <span class="text-spice">steamed to perfection.</span>
         </h1>
-        <p class="mt-5 max-w-lg text-lg text-white/90">
+        <p class="mt-5 max-w-lg text-lg text-ink/80">
           {site.tagline} Frozen veg &amp; non-veg momos and golden French fries — real ingredients, Himalayan herbs, delivered fresh to homes, retailers and partners.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <a href={site.whatsapp} target="_blank" rel="noopener" class="btn bg-white text-chili-600 shadow-[0_10px_24px_-8px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:bg-cream">
+          <a href={site.whatsapp} target="_blank" rel="noopener" class="btn border-2 border-ink bg-ink text-cream shadow-[0_10px_24px_-8px_rgba(0,0,0,0.4)] hover:-translate-y-1 hover:bg-[#1a0d04]">
             <Icon name="whatsapp" size={20} /> Order on WhatsApp
           </a>
-          <a href="/menu" class="btn border-2 border-white/80 text-white hover:bg-white/15">
+          <a href="/menu" class="btn border-2 border-ink/70 text-ink hover:bg-ink/10">
             See the menu <Icon name="arrow" size={18} />
           </a>
         </div>
-        <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-white/85">
-          <span class="flex items-center gap-1.5"><Icon name="check" size={16} class="text-fry" /> 100% real ingredients</span>
-          <span class="flex items-center gap-1.5"><Icon name="check" size={16} class="text-fry" /> Hygienically made</span>
-          <span class="flex items-center gap-1.5"><Icon name="check" size={16} class="text-fry" /> 365-day service</span>
+        <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-semibold text-ink/80">
+          <span class="flex items-center gap-1.5"><Icon name="check" size={16} class="text-herb" /> 100% real ingredients</span>
+          <span class="flex items-center gap-1.5"><Icon name="check" size={16} class="text-herb" /> Hygienically made</span>
+          <span class="flex items-center gap-1.5"><Icon name="check" size={16} class="text-herb" /> 365-day service</span>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ const featured = products.filter((p) => p.featured).slice(0, 6);
         <div class="float-bob absolute -bottom-5 -left-3 flex items-center gap-2 rounded-2xl border-2 border-ink bg-white px-4 py-3 text-ink shadow-[4px_4px_0_0_var(--color-ink)]" style="--bob-rot:-3deg">
           <span class="grid h-9 w-9 place-items-center rounded-full bg-fry text-ink"><Icon name="star" size={20} /></span>
           <div class="leading-tight">
-            <p class="text-xs font-bold uppercase tracking-wide text-chili-600">Awarded</p>
+            <p class="text-xs font-bold uppercase tracking-wide text-chili-700">Awarded</p>
             <p class="text-sm font-bold">Best Momo Manufacturer, Jharkhand</p>
           </div>
         </div>
@@ -95,7 +95,7 @@ const featured = products.filter((p) => p.featured).slice(0, 6);
     <div class="grid gap-6 md:grid-cols-3">
       {pillars.map((p, i) => (
         <div class="reveal sticker p-7" style={`--reveal-delay:${i * 0.12}s`}>
-          <span class="hover-wiggle grid h-14 w-14 place-items-center rounded-2xl border-2 border-ink bg-chili-50 text-chili shadow-[3px_3px_0_0_var(--color-ink)]">
+          <span class="hover-wiggle grid h-14 w-14 place-items-center rounded-2xl border-2 border-ink bg-chili-50 text-chili-600 shadow-[3px_3px_0_0_var(--color-ink)]">
             <Icon name={p.icon} size={28} />
           </span>
           <h3 class="mt-5 text-2xl">{p.title}</h3>
@@ -153,14 +153,14 @@ const featured = products.filter((p) => p.featured).slice(0, 6);
     <div class="sticker reveal grid gap-6 rounded-[2rem] p-8 md:grid-cols-3 md:p-10">
       <blockquote class="md:col-span-2">
         <p class="font-display text-2xl leading-snug md:text-3xl">
-          “Love momo? <span class="text-chili">You’ll never have just one.</span>”
+          “Love momo? <span class="text-spice">You’ll never have just one.</span>”
         </p>
         <p class="mt-4 text-ink/70">
           That’s the promise behind every batch — authentic Himalayan flavour, made with native herbs and real ingredients, for the freshest taste in every bite.
         </p>
       </blockquote>
       <div class="flex flex-col justify-center gap-3 rounded-2xl bg-cream-deep/50 p-6 text-center">
-        <p class="font-display text-4xl text-chili">6+</p>
+        <p class="font-display text-4xl text-chili-600">6+</p>
         <p class="text-sm text-ink/70">years serving families, retailers &amp; partners since {site.established}</p>
         <!-- TODO: client to confirm any stats (clients served, outlets, etc.) -->
       </div>

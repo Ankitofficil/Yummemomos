@@ -23,11 +23,11 @@ import { awards, videos } from '../data/site';
       <ol class="relative ml-3 border-l-2 border-fry/30">
         {awards.map((a) => (
           <li class="reveal relative mb-10 pl-8 last:mb-0">
-            <span class="absolute -left-[0.6rem] top-1 grid h-5 w-5 place-items-center rounded-full bg-fry text-white ring-4 ring-cream">
+            <span class="absolute -left-[0.6rem] top-1 grid h-5 w-5 place-items-center rounded-full bg-fry text-ink ring-4 ring-cream">
               <Icon name="star" size={12} />
             </span>
             <div class="sticker p-6">
-              <p class="text-sm font-semibold text-fry">{a.date}</p>
+              <p class="text-sm font-semibold text-tang-600">{a.date}</p>
               <h2 class="mt-1 text-2xl">{a.title}</h2>
               <p class="mt-1 text-ink/70">{a.by}</p>
             </div>

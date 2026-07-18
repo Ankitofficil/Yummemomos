@@ -60,7 +60,7 @@ const benefits = [
               <Icon name="whatsapp" size={18} /> {i === 0 ? site.phones[0].label : '7873282812'}
             </a>
           ))}
-          <a href={`mailto:${site.email}`} class="flex items-center gap-2 text-ink/75 hover:text-chili">
+          <a href={`mailto:${site.email}`} class="flex items-center gap-2 text-ink/75 hover:text-chili-700">
             <Icon name="mail" size={18} /> {site.email}
           </a>
         </div>
@@ -71,24 +71,24 @@ const benefits = [
         <div class="grid gap-1.5">
           <label for="f-name" class="text-sm font-semibold">Full name</label>
           <input id="f-name" name="name" type="text" required autocomplete="name"
-            class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white" />
+            class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili-600 focus:bg-white" />
         </div>
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="grid gap-1.5">
             <label for="f-phone" class="text-sm font-semibold">Phone</label>
             <input id="f-phone" name="phone" type="tel" required autocomplete="tel"
-              class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white" />
+              class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili-600 focus:bg-white" />
           </div>
           <div class="grid gap-1.5">
             <label for="f-city" class="text-sm font-semibold">City</label>
             <input id="f-city" name="city" type="text" required
-              class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white" />
+              class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili-600 focus:bg-white" />
           </div>
         </div>
         <div class="grid gap-1.5">
           <label for="f-msg" class="text-sm font-semibold">Message <span class="font-normal text-ink/50">(optional)</span></label>
           <textarea id="f-msg" name="message" rows="3"
-            class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili focus:bg-white"
+            class="rounded-xl border border-ink/15 bg-cream/50 px-4 py-3 focus:border-chili-600 focus:bg-white"
             placeholder="Tell us about your shop / plans…"></textarea>
         </div>
         <button type="submit" class="btn btn-primary mt-1 w-full text-lg">
