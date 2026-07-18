@@ -4,6 +4,9 @@ import Icon from './Icon.astro';
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
+
+// The local content studio only exists in `astro dev` — never link it in production.
+const isDev = import.meta.env.DEV;
 ---
 <header
   id="site-header"
@@ -84,6 +87,11 @@ const isActive = (href: string) =>
       </a>
     ))}
     <a href="/legal" class="rounded-2xl px-4 py-4 text-lg text-ink/60">Legal &amp; Terms</a>
+    {isDev && (
+      <a href="/admin" class="mx-4 mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-ink/20 px-4 py-2 text-sm font-bold uppercase tracking-wide text-chili-700 hover:border-chili-600 hover:bg-chili-50">
+        ⚙ Admin
+      </a>
+    )}
   </nav>
   <div class="container-x mt-6">
     <a href={site.whatsapp} target="_blank" rel="noopener" class="btn btn-primary w-full text-lg">
