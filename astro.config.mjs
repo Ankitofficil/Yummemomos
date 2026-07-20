@@ -7,7 +7,7 @@ import adminPanel from './scripts/admin-panel.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://www.yummemomos.com',
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !page.includes('/admin') })],
   vite: {
     // adminPanel is dev-only (apply: 'serve') — /admin never ships in the build
     plugins: [tailwindcss(), adminPanel()],

@@ -1,0 +1,62 @@
+---
+// Production stand-in for /admin. On the local dev server this URL is
+// intercepted by the admin middleware (scripts/admin-panel.mjs) and serves the
+// real content studio; this page is what visitors see on the deployed site.
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin — Yumme Momos</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; min-height: 100vh; display: grid; place-items: center;
+        background: #fffaeb; color: #2b1508; padding: 20px;
+        font: 16px/1.6 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+      }
+      .card {
+        width: min(94vw, 460px); background: #fff; border: 2px solid #2b1508;
+        border-radius: 1.25rem; box-shadow: 6px 6px 0 0 #2b1508; padding: 30px;
+      }
+      .dot {
+        margin: 0 auto 12px; display: grid; place-items: center; width: 56px; height: 56px;
+        border-radius: 999px; background: #fdc500; border: 2px solid #2b1508; font-size: 1.6rem;
+      }
+      h1 { font-family: ui-serif, Georgia, serif; font-size: 1.5rem; text-align: center; margin: 0 0 6px; }
+      p { color: #5d4433; margin: 0.6em 0; }
+      ol { color: #5d4433; padding-left: 1.3em; margin: 0.6em 0; }
+      li { margin: 0.35em 0; }
+      code {
+        background: #fefce8; border: 1px solid rgba(43, 21, 8, 0.2); border-radius: 6px;
+        padding: 1px 7px; font-size: 0.9em; color: #8f6400; font-weight: 600;
+      }
+      .home {
+        display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; width: 100%;
+        justify-content: center; min-height: 46px; border: 2px solid #2b1508; border-radius: 999px;
+        padding: 10px 20px; font-weight: 700; color: #2b1508; text-decoration: none;
+        background: linear-gradient(115deg, #fdc500 20%, #ffdd40 100%); box-shadow: 3px 3px 0 0 #2b1508;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="dot">🥟</div>
+      <h1>Content studio runs locally</h1>
+      <p>
+        For security, the Yumme Momos admin panel is not hosted on the public site.
+        It runs on the owner’s computer:
+      </p>
+      <ol>
+        <li>Open the project folder in a terminal</li>
+        <li>Run <code>npm run admin</code></li>
+        <li>Log in and edit — then push to deploy the changes</li>
+      </ol>
+      <p>Nothing to see here otherwise — the momos are on the menu! 🥟</p>
+      <a class="home" href="/">← Back to the site</a>
+    </main>
+  </body>
+</html>

@@ -3,9 +3,6 @@ import { site, nav } from '../data/site';
 import Icon from './Icon.astro';
 import StoreBadges from './StoreBadges.astro';
 
-// The local content studio only exists in `astro dev` — never link it in production.
-const isDev = import.meta.env.DEV;
-
 const socials = [
   { name: 'whatsapp', href: site.social.whatsapp, label: 'WhatsApp' },
   { name: 'facebook', href: site.social.facebook, label: 'Facebook' },
@@ -79,11 +76,9 @@ const socials = [
       <p>© 2019–2026 {site.name}. All Rights Reserved.</p>
       <p class="flex items-center gap-3">
         Made with care in Jamshedpur, Jharkhand.
-        {isDev && (
-          <a href="/admin" class="rounded-full border border-ink/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-chili-700 hover:border-chili-600 hover:bg-chili-50">
-            ⚙ Admin
-          </a>
-        )}
+        <a href="/admin" class="rounded-full border border-ink/20 px-3 py-1 text-xs font-bold uppercase tracking-wide text-chili-700 hover:border-chili-600 hover:bg-chili-50">
+          ⚙ Admin
+        </a>
       </p>
     </div>
   </div>
