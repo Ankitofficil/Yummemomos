@@ -58,6 +58,72 @@
   main { max-width: 1080px; margin: 0 auto; padding: 20px 22px 90px; }
   .hint { margin: 4px 0 18px; color: var(--ink-70); font-size: 0.9rem; }
 
+  /* --- split editor / preview layout --- */
+  .workspace { max-width: 1600px; margin: 0 auto; }
+  body.preview-on .workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  body.preview-on main { max-width: none; margin: 0; }
+
+  .preview-col { display: none; }
+  body.preview-on .preview-col {
+    display: block; position: sticky; top: 66px; align-self: start;
+    height: calc(100vh - 66px); border-left: 2px solid var(--ink);
+    background:
+      radial-gradient(120% 60% at 90% 0%, rgba(253, 221, 26, 0.25) 0%, transparent 60%),
+      var(--cream);
+    overflow-y: auto;
+  }
+  .preview-head {
+    position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px; background: rgba(255, 250, 235, 0.94); backdrop-filter: blur(6px);
+    border-bottom: 1.5px solid rgba(43, 21, 8, 0.18); font-size: 0.82rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-dark);
+  }
+  .preview-head .live-dot { width: 9px; height: 9px; border-radius: 999px; background: var(--herb); box-shadow: 0 0 0 0 rgba(47, 125, 72, 0.5); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(47, 125, 72, 0.5); } 70% { box-shadow: 0 0 0 7px rgba(47, 125, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(47, 125, 72, 0); } }
+  .preview-head .spacer { flex: 1; }
+  .preview-body { padding: 20px 18px 40px; }
+  .preview-empty { color: var(--ink-40); font-style: italic; padding: 40px 8px; text-align: center; }
+
+  /* preview mimics the real site's look (yellow theme, sticker cards) */
+  .pv { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: var(--ink); }
+  .pv-eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: #fff; border: 2px solid var(--ink); box-shadow: 2px 2px 0 0 var(--ink); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--gold-dark); }
+  .pv-h { font-family: 'Fraunces', ui-serif, Georgia, serif; font-weight: 700; letter-spacing: -0.02em; }
+  .pv-grid { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; margin-top: 14px; }
+  @media (max-width: 1200px) { .pv-grid { grid-template-columns: 1fr; } }
+  .pv-card {
+    background: #fff; border: 2px solid var(--ink); border-radius: 0.9rem;
+    box-shadow: 4px 4px 0 0 var(--ink); overflow: hidden; transition: box-shadow 0.2s;
+  }
+  .pv-card.flash { box-shadow: 0 0 0 3px var(--yellow), 6px 6px 0 0 var(--ink); }
+  .pv-thumb { aspect-ratio: 4 / 3; display: grid; place-items: center; position: relative; color: rgba(43,21,8,0.28); font-size: 2.2rem; }
+  .pv-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .pv-badge { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.9); border-radius: 999px; padding: 3px 8px; font-size: 0.66rem; font-weight: 700; }
+  .pv-badge .sq { width: 12px; height: 12px; border-radius: 3px; border: 1.6px solid; display: grid; place-items: center; }
+  .pv-badge .sq b { width: 6px; height: 6px; border-radius: 999px; }
+  .pv-veg { color: var(--herb); } .pv-veg .sq { border-color: var(--herb); } .pv-veg .sq b { background: var(--herb); }
+  .pv-nonveg { color: var(--spice); } .pv-nonveg .sq { border-color: var(--spice); } .pv-nonveg .sq b { background: var(--spice); }
+  .pv-body { padding: 14px 16px; }
+  .pv-body h4 { font-family: 'Fraunces', ui-serif, Georgia, serif; font-size: 1.15rem; margin: 0 0 5px; }
+  .pv-desc { font-size: 0.88rem; color: var(--ink-70); margin: 0 0 12px; }
+  .pv-order { display: block; text-align: center; background: linear-gradient(115deg, var(--yellow) 20%, var(--yellow-light)); border-radius: 999px; padding: 9px; font-weight: 700; font-size: 0.85rem; }
+  .pv-tag-feat { display: inline-block; margin-left: 8px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-dark); border: 1.5px solid var(--gold); background: #fefce8; border-radius: 999px; padding: 1px 7px; vertical-align: middle; }
+
+  .pv-list-card { background: #fff; border: 2px solid var(--ink); border-radius: 0.9rem; box-shadow: 4px 4px 0 0 var(--ink); padding: 16px 18px; margin-top: 14px; transition: box-shadow 0.2s; }
+  .pv-list-card.flash { box-shadow: 0 0 0 3px var(--yellow), 6px 6px 0 0 var(--ink); }
+  .pv-award-star { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 999px; border: 2px solid var(--ink); background: var(--fry, #ff9d1f); font-size: 1rem; }
+  .pv-date { font-size: 0.78rem; font-weight: 700; color: var(--gold-dark); }
+  .pv-faq-q { font-family: 'Fraunces', ui-serif, Georgia, serif; font-size: 1.05rem; margin: 0 0 6px; }
+  .pv-faq-a { font-size: 0.88rem; color: var(--ink-70); margin: 0; }
+  .pv-panel { background: linear-gradient(130deg, var(--yellow) 10%, #ffd21a 60%, var(--yellow-light) 100%); border: 2px solid var(--ink); border-radius: 1rem; box-shadow: 5px 5px 0 0 var(--ink); padding: 20px; margin-top: 8px; }
+  .pv-kv { margin-top: 14px; }
+  .pv-kv .row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px dashed rgba(43,21,8,0.18); font-size: 0.9rem; }
+  .pv-kv .row:last-child { border-bottom: 0; }
+  .pv-kv .k { flex: 0 0 42%; font-weight: 700; color: var(--gold-dark); }
+  .pv-kv .v { flex: 1; word-break: break-word; }
+  .pv-vid { display: flex; gap: 12px; align-items: center; margin-top: 12px; }
+  .pv-vid .thumb { flex: 0 0 120px; aspect-ratio: 16/9; border-radius: 8px; border: 2px solid var(--ink); background-size: cover; background-position: center; position: relative; }
+  .pv-vid .play { position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.4rem; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+
   .card {
     background: #fff; border: 2px solid var(--ink); border-radius: var(--radius);
     box-shadow: 4px 4px 0 0 var(--ink); padding: 18px 20px; margin-bottom: 16px;
@@ -125,6 +191,18 @@
     .card { padding: 14px 14px; }
     .row-head { flex-wrap: wrap; row-gap: 6px; }
     .img-row { flex-wrap: wrap; }
+
+    /* On phones the preview is a full-screen overlay, not a side column */
+    body.preview-on .workspace { display: block; }
+    body.preview-on .preview-col {
+      position: fixed; inset: 0; height: auto; z-index: 55;
+      border-left: 0; overflow-y: auto;
+    }
+    .preview-head { padding: 12px 16px; font-size: 0.9rem; }
+    .preview-head #preview-close { padding: 8px 14px; font-size: 0.9rem; }
+    /* hide the fixed Save bar while the preview overlay is up */
+    body.preview-on #save { display: none; }
+    .pv-grid { grid-template-columns: 1fr; }
   }
 
   .auth-overlay {
@@ -151,16 +229,29 @@
   <span class="spacer"></span>
   <span id="status" role="status"></span>
   <a class="btn btn-ghost" href="/" target="_blank" rel="noopener">View site ↗</a>
+  <button class="btn btn-ghost" id="preview-toggle" title="Show a live preview of your edits" hidden>👁 Preview</button>
   <button class="btn btn-primary" id="save">💾 Save changes</button>
   <button class="btn btn-ghost" id="logout" title="Log out" hidden>Log out</button>
   <button class="btn btn-ghost btn-danger" id="delete-account" title="Delete the admin account" hidden>Delete account</button>
 </header>
 
 <nav class="tabs" id="tabs"></nav>
-<main>
-  <p class="hint" id="hint"></p>
-  <div id="panel"></div>
-</main>
+<div class="workspace">
+  <main>
+    <p class="hint" id="hint"></p>
+    <div id="panel"></div>
+  </main>
+  <aside class="preview-col" id="preview-col" aria-label="Live preview">
+    <div class="preview-head">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>Live preview</span>
+      <span id="preview-label"></span>
+      <span class="spacer"></span>
+      <button class="btn btn-sm btn-ghost" id="preview-close" title="Hide preview">✕</button>
+    </div>
+    <div class="preview-body" id="preview-body"></div>
+  </aside>
+</div>
 <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" hidden />
 
 <div class="auth-overlay" id="auth" hidden>
@@ -380,6 +471,120 @@
     },
   };
 
+  // ---------- live preview (mirrors how the real site renders this content) ----------
+  // `focus` = index of the item being edited, so we can highlight + scroll to it.
+  const PREVIEW_LABEL = {
+    products: 'Menu page', awards: 'Achievements', faqs: 'Contact · FAQ',
+    videos: 'Achievements · videos', pillars: 'Home · promises', site: 'Site-wide',
+  };
+  const preview = {
+    products(focus) {
+      if (!state.products.length) return '<p class="preview-empty">No products yet — add one to see it here.</p>';
+      const cards = state.products.map((p, i) => `
+        <div class="pv-card${i === focus ? ' flash' : ''}" data-pv="${i}">
+          <div class="pv-thumb" style="background:${p.veg ? 'linear-gradient(135deg,#eaf4ee,#fdf0c2)' : 'linear-gradient(135deg,#ffdfc4,#ffe9c2)'}">
+            ${p.image ? `<img src="${esc(p.image)}" alt="" />` : '🥟'}
+            <span class="pv-badge ${p.veg ? 'pv-veg' : 'pv-nonveg'}"><span class="sq"><b></b></span>${p.veg ? (p.jain ? 'Jain' : 'Veg') : 'Non-veg'}</span>
+          </div>
+          <div class="pv-body">
+            <h4>${esc(p.name) || '<span style="color:var(--ink-40)">Untitled</span>'}${p.featured ? '<span class="pv-tag-feat">Featured</span>' : ''}</h4>
+            <p class="pv-desc">${esc(p.desc) || '<span style="color:var(--ink-40)">No description yet.</span>'}</p>
+            <span class="pv-order">📱 Order</span>
+          </div>
+        </div>`).join('');
+      return `<span class="pv-eyebrow">✦ The full range</span>
+        <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">Our menu</h2>
+        <div class="pv-grid">${cards}</div>`;
+    },
+    awards(focus) {
+      if (!state.awards.length) return '<p class="preview-empty">No awards yet.</p>';
+      return `<span class="pv-eyebrow">★ Recognised locally</span>
+        <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">Award-winning momos</h2>
+        ${state.awards.map((a, i) => `
+        <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}">
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <span class="pv-award-star">★</span>
+            <div>
+              <p class="pv-date">${esc(a.date) || esc(a.iso)}</p>
+              <h4 class="pv-h" style="font-size:1.1rem;margin:2px 0 3px">${esc(a.title) || '<span style="color:var(--ink-40)">Untitled award</span>'}</h4>
+              <p class="pv-desc" style="margin:0">${esc(a.by)}</p>
+            </div>
+          </div>
+        </div>`).join('')}`;
+    },
+    faqs(focus) {
+      if (!state.faqs.length) return '<p class="preview-empty">No FAQs yet.</p>';
+      return `<span class="pv-eyebrow">? Good to know</span>
+        <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">Frequently asked</h2>
+        ${state.faqs.map((f, i) => `
+        <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}">
+          <p class="pv-faq-q">${esc(f.q) || '<span style="color:var(--ink-40)">Untitled question</span>'}</p>
+          <p class="pv-faq-a">${esc(f.a) || '<span style="color:var(--ink-40)">No answer yet.</span>'}</p>
+        </div>`).join('')}`;
+    },
+    videos(focus) {
+      if (!state.videos.length) return '<p class="preview-empty">No videos yet.</p>';
+      return `<span class="pv-eyebrow">▶ Watch</span>
+        <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">See us in action</h2>
+        ${state.videos.map((v, i) => `
+        <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}">
+          <div class="pv-vid">
+            <div class="thumb" style="background-image:url('https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/hqdefault.jpg')"><span class="play">▶</span></div>
+            <div><h4 class="pv-h" style="font-size:1.05rem;margin:0 0 4px">${esc(v.title) || '<span style="color:var(--ink-40)">Untitled</span>'}</h4><p class="pv-desc" style="margin:0;font-size:0.78rem">ID: ${esc(v.id) || '—'}</p></div>
+          </div>
+        </div>`).join('')}`;
+    },
+    pillars(focus) {
+      return `<span class="pv-eyebrow">✦ Why Yumme Momos</span>
+        <div style="margin-top:12px;display:grid;gap:12px">
+        ${state.pillars.map((p, i) => `
+        <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}" style="margin-top:0">
+          <div style="font-size:1.4rem;margin-bottom:4px">${{ heart: '❤️', mountain: '⛰️', leaf: '🌿', star: '⭐', sparkle: '✨' }[p.icon] || '✨'}</div>
+          <h4 class="pv-h" style="font-size:1.15rem;margin:0 0 4px">${esc(p.title) || '<span style="color:var(--ink-40)">Untitled</span>'}</h4>
+          <p class="pv-desc" style="margin:0">${esc(p.body)}</p>
+        </div>`).join('')}</div>`;
+    },
+    site() {
+      const s = state.site;
+      const row = (k, v) => `<div class="row"><span class="k">${esc(k)}</span><span class="v">${esc(v) || '<span style="color:var(--ink-40)">—</span>'}</span></div>`;
+      return `<div class="pv-panel">
+          <div class="pv-eyebrow" style="background:#fff">🥟 ${esc(s.shortName)}</div>
+          <h2 class="pv-h" style="font-size:1.5rem;margin:10px 0 4px">${esc(s.name)}</h2>
+          <p style="margin:0;font-size:0.9rem">${esc(s.tagline)}</p>
+        </div>
+        <div class="pv-kv">
+          ${row('Phone', s.phones.map((p) => p.label).filter(Boolean).join(' · '))}
+          ${row('Email', s.email)}
+          ${row('Hours', s.hours)}
+          ${row('Address', s.address.full)}
+          ${row('WhatsApp', s.whatsapp)}
+          ${row('Facebook', s.social.facebook)}
+          ${row('YouTube', s.social.youtube)}
+          ${row('Instagram', s.social.instagram)}
+        </div>`;
+    },
+  };
+
+  // Default on for desktop (side-by-side); default off on phones (overlay would
+  // otherwise cover the whole editor on load). Stored choice always wins.
+  const isNarrow = window.matchMedia('(max-width: 700px)').matches;
+  const savedPref = localStorage.getItem('previewOn');
+  let previewOn = savedPref == null ? !isNarrow : savedPref !== '0';
+  function applyPreviewVisibility() {
+    document.body.classList.toggle('preview-on', previewOn && !!state);
+    const t = $('#preview-toggle');
+    if (t) t.textContent = previewOn ? '👁 Hide preview' : '👁 Preview';
+  }
+  function renderPreview(focus) {
+    if (!previewOn || !state) return;
+    $('#preview-label').textContent = '· ' + (PREVIEW_LABEL[tab] || '');
+    $('#preview-body').innerHTML = preview[tab](focus);
+    if (focus != null) {
+      const el = $(`#preview-body [data-pv="${focus}"]`);
+      if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
   function renderTabs() {
     $('#tabs').innerHTML = TABS.map(([id, label]) =>
       `<button data-tab="${id}" class="${id === tab ? 'active' : ''}">${label}</button>`).join('');
@@ -387,7 +592,14 @@
   function renderPanel() {
     $('#hint').textContent = HINTS[tab];
     $('#panel').innerHTML = render[tab]();
+    renderPreview();
   }
+
+  // index of the top-level list item a field path points at (e.g. products.2.name → 2)
+  const focusIndex = (path) => {
+    const m = path.match(/^[a-z]+\.(\d+)\./i);
+    return m ? +m[1] : null;
+  };
 
   // ---------- events ----------
   document.addEventListener('input', (e) => {
@@ -396,10 +608,25 @@
     const val = e.target.dataset.type === 'bool' ? e.target.checked : e.target.value;
     set(state, path, val);
     markDirty();
+    renderPreview(focusIndex(path)); // live: update preview as they type
   });
   document.addEventListener('change', (e) => {
     // re-render product cards when badges (veg/jain/featured) change
     if (e.target.dataset?.type === 'bool' && tab === 'products') renderPanel();
+  });
+
+  // ---------- preview toggle ----------
+  $('#preview-toggle').addEventListener('click', () => {
+    previewOn = !previewOn;
+    localStorage.setItem('previewOn', previewOn ? '1' : '0');
+    applyPreviewVisibility();
+    renderPreview();
+    if (previewOn) $('#preview-col').scrollTop = 0; // show the head (with ✕) first
+  });
+  $('#preview-close').addEventListener('click', () => {
+    previewOn = false;
+    localStorage.setItem('previewOn', '0');
+    applyPreviewVisibility();
   });
 
   document.addEventListener('click', (e) => {
@@ -488,12 +715,15 @@
     $('#auth').hidden = false;
     $('#logout').hidden = true;
     $('#delete-account').hidden = true;
+    $('#preview-toggle').hidden = true;
+    document.body.classList.remove('preview-on');
     $('#auth-user').focus();
   }
   function hideAuth() {
     $('#auth').hidden = true;
     $('#logout').hidden = false;
     $('#delete-account').hidden = false;
+    $('#preview-toggle').hidden = false;
     $('#auth-pass').value = '';
     $('#auth-confirm').value = '';
   }
@@ -591,6 +821,7 @@
     }
     state = await res.json();
     setStatus('');
+    applyPreviewVisibility();
     renderTabs();
     renderPanel();
   }
