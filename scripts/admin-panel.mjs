@@ -167,7 +167,7 @@ export default function adminPanel() {
 
         // --- public auth routes ---
         if (url === '/api/admin/status') {
-          return send(res, 200, { setup: !!(await readAuth()) });
+          return send(res, 200, { setup: !!(await readAuth()), mode: 'local' });
         }
 
         if (url === '/api/admin/setup' && req.method === 'POST') {

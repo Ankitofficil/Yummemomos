@@ -294,6 +294,7 @@
     site: 'Contact details, links and brand copy used across every page. Save, then check the running site — it reloads automatically.',
   };
 
+  let mode = 'local'; // 'local' = dev middleware (filesystem); 'live' = Vercel + GitHub
   let state = null;
   let dirty = false;
   let tab = 'products';
@@ -722,7 +723,8 @@
   function hideAuth() {
     $('#auth').hidden = true;
     $('#logout').hidden = false;
-    $('#delete-account').hidden = false;
+    // Account deletion only applies to the local file-based account, not live env creds.
+    $('#delete-account').hidden = mode === 'live';
     $('#preview-toggle').hidden = false;
     $('#auth-pass').value = '';
     $('#auth-confirm').value = '';
@@ -799,7 +801,9 @@
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         dirty = false;
-        setStatus('✓ Saved — site reloads automatically', 'ok');
+        setStatus(mode === 'live'
+          ? '✓ Saved to GitHub — live site updates in about a minute'
+          : '✓ Saved — site reloads automatically', 'ok');
       } else {
         setStatus(`✗ ${data.error || res.statusText}`, 'err');
       }
@@ -828,8 +832,17 @@
 
   (async () => {
     const status = await fetch('/api/admin/status').then((r) => r.json()).catch(() => null);
-    if (!status) { setStatus('✗ Could not reach the dev server', 'err'); return; }
-    if (!status.setup) { showAuth(true); return; }
+    if (!status) { setStatus('✗ Could not reach the server', 'err'); return; }
+    mode = status.mode || 'local';
+    // Live deployment missing its env vars → explain instead of a broken login.
+    if (mode === 'live' && status.configured === false) {
+      setStatus('');
+      showAuth(false, 'Live admin is not configured yet — add the environment variables in Vercel.');
+      $('#auth-user').disabled = $('#auth-pass').disabled = $('#auth-submit').disabled = true;
+      return;
+    }
+    // In live mode there is no first-run account setup — always log in.
+    if (mode !== 'live' && !status.setup) { showAuth(true); return; }
     if (!token) { showAuth(false); return; }
     hideAuth();
     await loadContent();

@@ -47,6 +47,15 @@ screenshots/                     # before/ after/ comparison.html
 
 ## Editing
 
-Change copy, contacts, products, awards and FAQ in **`src/data/site.ts`**, then
-rebuild. See **[HANDOFF.md](HANDOFF.md)** for the full list of client-supplied
-items (photos, prices, GST/FSSAI, Instagram URL, etc.).
+All editable content (contacts, products, awards, FAQ, brand copy) lives in
+**`src/data/content.json`**. Three ways to edit it:
+
+1. **Admin panel, locally** — `npm run admin`, open `/admin`, log in, edit with a
+   live preview, Save. (Creates a local login on first run.)
+2. **Admin panel, on the live site** — edit from any browser/phone at
+   `your-site/admin`; each save commits to GitHub and Vercel redeploys. Requires
+   a one-time setup — see **[ADMIN-LIVE-SETUP.md](ADMIN-LIVE-SETUP.md)**.
+3. **By hand** — edit `src/data/content.json` directly and rebuild.
+
+See **[HANDOFF.md](HANDOFF.md)** for the full list of client-supplied items
+(photos, prices, GST/FSSAI, Instagram URL, etc.).
