@@ -723,8 +723,9 @@
   function hideAuth() {
     $('#auth').hidden = true;
     $('#logout').hidden = false;
-    // Account deletion only applies to the local file-based account, not live env creds.
-    $('#delete-account').hidden = mode === 'live';
+    // Account deletion only applies to the local file-based account, not
+    // env-based credentials used on a hosted server (mode 'live' / 'server').
+    $('#delete-account').hidden = mode !== 'local';
     $('#preview-toggle').hidden = false;
     $('#auth-pass').value = '';
     $('#auth-confirm').value = '';
@@ -792,6 +793,22 @@
     showAuth(false);
   });
 
+  // On the Node server, saving triggers a rebuild — poll until it finishes.
+  async function pollBuild() {
+    for (let i = 0; i < 60; i++) {
+      await new Promise((r) => setTimeout(r, 1500));
+      let s;
+      try { s = await fetch('/api/admin/build-status').then((r) => r.json()); }
+      catch { continue; }
+      if (!s.building) {
+        if (s.ok) setStatus('✓ Published — changes are live. Refresh the site to see them.', 'ok');
+        else setStatus('✗ Saved, but the rebuild failed — check the server logs.', 'err');
+        return;
+      }
+    }
+    setStatus('Saved — rebuild is taking a while; check the site shortly.', 'ok');
+  }
+
   $('#save').addEventListener('click', async () => {
     // keep slugs tidy before validation
     for (const p of state.products) p.slug = slugify(p.slug || p.name);
@@ -801,9 +818,9 @@
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         dirty = false;
-        setStatus(mode === 'live'
-          ? '✓ Saved to GitHub — live site updates in about a minute'
-          : '✓ Saved — site reloads automatically', 'ok');
+        if (mode === 'live') setStatus('✓ Saved to GitHub — live site updates in about a minute', 'ok');
+        else if (mode === 'server') { setStatus('✓ Saved — rebuilding the site…', 'ok'); pollBuild(); }
+        else setStatus('✓ Saved — site reloads automatically', 'ok');
       } else {
         setStatus(`✗ ${data.error || res.statusText}`, 'err');
       }
@@ -834,15 +851,17 @@
     const status = await fetch('/api/admin/status').then((r) => r.json()).catch(() => null);
     if (!status) { setStatus('✗ Could not reach the server', 'err'); return; }
     mode = status.mode || 'local';
-    // Live deployment missing its env vars → explain instead of a broken login.
-    if (mode === 'live' && status.configured === false) {
+    const hosted = mode !== 'local'; // 'live' (Vercel) or 'server' (Node/Hostinger)
+    // Hosted deployment missing its env vars → explain instead of a broken login.
+    if (hosted && status.configured === false) {
       setStatus('');
-      showAuth(false, 'Live admin is not configured yet — add the environment variables in Vercel.');
+      const where = mode === 'live' ? 'in Vercel' : 'in your hosting control panel';
+      showAuth(false, `Admin is not configured yet — add the environment variables ${where}.`);
       $('#auth-user').disabled = $('#auth-pass').disabled = $('#auth-submit').disabled = true;
       return;
     }
-    // In live mode there is no first-run account setup — always log in.
-    if (mode !== 'live' && !status.setup) { showAuth(true); return; }
+    // Only the local file-based panel has first-run account setup; hosted logs in.
+    if (!hosted && !status.setup) { showAuth(true); return; }
     if (!token) { showAuth(false); return; }
     hideAuth();
     await loadContent();
