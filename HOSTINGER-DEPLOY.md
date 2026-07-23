@@ -18,7 +18,8 @@ Websites → your site → Advanced → Node.js** (sometimes "Setup Node.js App"
 - **Create application**
 - **Application root:** the folder holding this project (where `package.json` is)
 - **Application startup file:** `server.mjs`
-- **Node.js version:** 18 or newer
+- **Node.js version:** **20 or newer** (the build tools require Node 20+; Node 18
+  will fail with a `styleText` / `vite` error)
 
 ### 2. Add environment variables
 

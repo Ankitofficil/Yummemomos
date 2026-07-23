@@ -15,7 +15,7 @@
     "screenshots:after": "node scripts/screenshots-after.mjs"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
