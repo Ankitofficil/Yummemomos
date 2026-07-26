@@ -39,6 +39,27 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 (Don't set `PORT` — Hostinger provides it automatically.)
 
+#### Recommended on shared hosting: GitHub "deploy" mode
+
+A full `astro build` inside the running app is heavy and can be killed on shared
+hosting (symptom: **"Saved, but the rebuild failed"**). To avoid this, let the
+admin **commit changes to GitHub** and have Hostinger's auto-deploy rebuild the
+site in its proper build environment. Add three more variables:
+
+| Variable        | Value                                             |
+|-----------------|---------------------------------------------------|
+| `GITHUB_TOKEN`  | fine-grained PAT with **Contents: Read and write** on this repo |
+| `GITHUB_REPO`   | `Ankitofficil/Yummemomos`                         |
+| `GITHUB_BRANCH` | `main`                                             |
+
+Create the token at **GitHub → Settings → Developer settings → Fine-grained
+tokens**, scoped to this repo, Contents = Read and write.
+
+With these set, **Save** commits `content.json` (and uploaded images) to GitHub;
+Hostinger's Git deployment rebuilds and republishes automatically (~1 minute).
+Without them, the app falls back to building in-process (fine locally, fragile on
+shared hosting).
+
 ### 3. Install & build
 
 In the Node.js app screen click **Run NPM Install**. This installs
@@ -60,8 +81,11 @@ should load. Visit `your-domain/admin` — you should get a login screen.
 1. Go to `your-domain/admin` on any device (phone included).
 2. Log in with `ADMIN_USER` / `ADMIN_PASSWORD`.
 3. Edit products, awards, FAQs, photos, contact details — with a live preview.
-4. Click **Save changes**. The panel shows "rebuilding…", then "Published".
-5. Refresh the public site to see the update (usually 3–10 seconds).
+4. Click **Save changes**.
+   - **GitHub deploy mode:** shows "Saved to GitHub — live site updates in about a
+     minute" (Hostinger redeploys automatically).
+   - **In-process mode:** shows "rebuilding…", then done (a few seconds).
+5. Refresh the public site to see the update.
 
 ---
 

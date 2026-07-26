@@ -35,6 +35,51 @@ const MAX_BODY = 1024 * 1024;
 const MAX_IMAGE = 8 * 1024 * 1024;
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif']);
 
+// --- Deploy mode ---
+// "git": on shared hosting (e.g. Hostinger), a full in-process `astro build` is
+// heavy and often gets killed. When GITHUB_TOKEN + GITHUB_REPO are set, the admin
+// instead COMMITS content/images to GitHub; the host's auto-deploy rebuilds in a
+// proper build environment. Falls back to "local" (write file + spawn build) when
+// those aren't set (local dev, or a host that runs its own build fine).
+const GH_TOKEN = process.env.GITHUB_TOKEN;
+const GH_REPO = process.env.GITHUB_REPO;          // "owner/name"
+const GH_BRANCH = process.env.GITHUB_BRANCH || 'main';
+const gitMode = () => !!(GH_TOKEN && GH_REPO);
+const CONTENT_REPO_PATH = 'src/data/content.json';
+
+const ghHeaders = () => ({
+  Authorization: `Bearer ${GH_TOKEN}`,
+  Accept: 'application/vnd.github+json',
+  'X-GitHub-Api-Version': '2022-11-28',
+  'User-Agent': 'yumme-admin',
+});
+
+// Get the current file sha (needed to update a file via the GitHub Contents API).
+async function ghSha(repoPath) {
+  const url = `https://api.github.com/repos/${GH_REPO}/contents/${repoPath}?ref=${GH_BRANCH}`;
+  const r = await fetch(url, { headers: ghHeaders() });
+  if (r.status === 404) return null; // new file
+  if (!r.ok) throw new Error(`GitHub read failed (${r.status})`);
+  return (await r.json()).sha;
+}
+
+// Commit a file (text or base64) to the repo. base64=true for binary (images).
+async function ghCommit(repoPath, content, message, base64 = false) {
+  const sha = await ghSha(repoPath);
+  const url = `https://api.github.com/repos/${GH_REPO}/contents/${repoPath}`;
+  const body = {
+    message,
+    content: base64 ? content : Buffer.from(content, 'utf8').toString('base64'),
+    branch: GH_BRANCH,
+  };
+  if (sha) body.sha = sha;
+  const r = await fetch(url, { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!r.ok) {
+    const detail = await r.text().catch(() => '');
+    throw new Error(`GitHub write failed (${r.status}): ${detail.slice(0, 200)}`);
+  }
+}
+
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
@@ -186,7 +231,7 @@ const server = createServer(async (req, res) => {
   // ---- admin API ----
   if (url.startsWith('/api/admin/')) {
     if (url === '/api/admin/status')
-      return send(res, 200, { setup: configured(), mode: 'server', configured: configured() });
+      return send(res, 200, { setup: configured(), mode: 'server', configured: configured(), deploy: gitMode() ? 'git' : 'rebuild' });
 
     if (url === '/api/admin/login' && req.method === 'POST') {
       if (!configured()) return send(res, 503, { error: 'Admin not configured on this server' });
@@ -215,9 +260,18 @@ const server = createServer(async (req, res) => {
         catch (e) { return send(res, 400, { error: `Invalid JSON: ${e.message}` }); }
         const problem = validate(parsed);
         if (problem) return send(res, 400, { error: problem });
+        const text = JSON.stringify(parsed, null, 2) + '\n';
+        if (gitMode()) {
+          // Commit to GitHub → host auto-deploy rebuilds (no heavy in-process build).
+          try {
+            await ghCommit(CONTENT_REPO_PATH, text, 'Update site content via admin panel');
+            await writeFile(CONTENT, text, 'utf8').catch(() => {}); // keep local copy in sync
+            return send(res, 200, { ok: true, deploying: true });
+          } catch (e) { return send(res, 502, { error: e.message }); }
+        }
         try {
           await copyFile(CONTENT, BACKUP).catch(() => {});
-          await writeFile(CONTENT, JSON.stringify(parsed, null, 2) + '\n', 'utf8');
+          await writeFile(CONTENT, text, 'utf8');
           rebuild();
           return send(res, 200, { ok: true, rebuilding: true });
         } catch (e) { return send(res, 500, { error: e.message }); }
@@ -230,8 +284,16 @@ const server = createServer(async (req, res) => {
         const rawName = decodeURIComponent(req.headers['x-filename'] || 'image.jpg');
         const bytes = await readBody(req, MAX_IMAGE);
         if (!bytes.length) return send(res, 400, { error: 'Empty upload' });
-        await mkdir(UPLOADS, { recursive: true });
         const name = await freeUploadName(rawName);
+        if (gitMode()) {
+          // Commit the image to the repo → host redeploys with it.
+          await ghCommit(`public/images/uploads/${name}`, bytes.toString('base64'),
+            `Upload image ${name} via admin panel`, true);
+          await mkdir(UPLOADS, { recursive: true }).catch(() => {});
+          await writeFile(path.join(UPLOADS, name), bytes).catch(() => {});
+          return send(res, 200, { ok: true, path: `/images/uploads/${name}`, deploying: true });
+        }
+        await mkdir(UPLOADS, { recursive: true });
         await writeFile(path.join(UPLOADS, name), bytes);
         rebuild(); // so the new image is copied into dist/
         return send(res, 200, { ok: true, path: `/images/uploads/${name}`, rebuilding: true });

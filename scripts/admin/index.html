@@ -294,7 +294,8 @@
     site: 'Contact details, links and brand copy used across every page. Save, then check the running site — it reloads automatically.',
   };
 
-  let mode = 'local'; // 'local' = dev middleware (filesystem); 'live' = Vercel + GitHub
+  let mode = 'local'; // 'local' = dev middleware (filesystem); 'live' = Vercel + GitHub; 'server' = Node host
+  let deploy = 'rebuild'; // 'git' = save commits to GitHub (host redeploys); 'rebuild' = in-server astro build
   let state = null;
   let dirty = false;
   let tab = 'products';
@@ -818,7 +819,7 @@
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         dirty = false;
-        if (mode === 'live') setStatus('✓ Saved to GitHub — live site updates in about a minute', 'ok');
+        if (mode === 'live' || deploy === 'git') setStatus('✓ Saved to GitHub — live site updates in about a minute', 'ok');
         else if (mode === 'server') { setStatus('✓ Saved — rebuilding the site…', 'ok'); pollBuild(); }
         else setStatus('✓ Saved — site reloads automatically', 'ok');
       } else {
@@ -851,6 +852,7 @@
     const status = await fetch('/api/admin/status').then((r) => r.json()).catch(() => null);
     if (!status) { setStatus('✗ Could not reach the server', 'err'); return; }
     mode = status.mode || 'local';
+    deploy = status.deploy || 'rebuild';
     const hosted = mode !== 'local'; // 'live' (Vercel) or 'server' (Node/Hostinger)
     // Hosted deployment missing its env vars → explain instead of a broken login.
     if (hosted && status.configured === false) {
