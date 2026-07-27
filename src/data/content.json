@@ -73,16 +73,14 @@
       "name": "Veg Momo",
       "veg": true,
       "desc": "Classic garden-fresh vegetables, hand-folded and steamed to soft perfection.",
-      "featured": true,
-      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-03-pm-ms1lh0y7.jpeg"
+      "featured": true
     },
     {
       "slug": "chicken-momo",
       "name": "Chicken Momo",
       "veg": false,
       "desc": "Juicy, well-spiced minced chicken filling in a delicate steamed wrapper.",
-      "featured": true,
-      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-03-pm-2-ms2r8g3t.jpeg"
+      "featured": true
     },
     {
       "slug": "paneer-corn-momo",
