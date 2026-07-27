@@ -73,14 +73,16 @@
       "name": "Veg Momo",
       "veg": true,
       "desc": "Classic garden-fresh vegetables, hand-folded and steamed to soft perfection.",
-      "featured": true
+      "featured": true,
+      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-03-pm-ms2rat83.jpeg"
     },
     {
       "slug": "chicken-momo",
       "name": "Chicken Momo",
       "veg": false,
       "desc": "Juicy, well-spiced minced chicken filling in a delicate steamed wrapper.",
-      "featured": true
+      "featured": true,
+      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-03-pm-2-ms2rc1s8.jpeg"
     },
     {
       "slug": "paneer-corn-momo",
@@ -88,7 +90,7 @@
       "veg": true,
       "desc": "Creamy paneer and sweet corn — a rich, satisfying vegetarian favourite.",
       "featured": true,
-      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-02-pm-ms1lhva9.jpeg"
+      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-02-pm-ms2rcqms.jpeg"
     },
     {
       "slug": "jain-veg-momo",
@@ -103,14 +105,15 @@
       "veg": true,
       "desc": "Melty cheese and sweet corn — gooey, indulgent and irresistibly moreish.",
       "featured": true,
-      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-03-pm-1-ms1lilzd.jpeg"
+      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-03-pm-1-ms2rda35.jpeg"
     },
     {
       "slug": "fish-momo",
       "name": "Fish Momo",
       "veg": false,
       "desc": "Tender, delicately seasoned fish filling for a fresh coastal twist.",
-      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-02-pm-1-ms1livfl.jpeg"
+      "featured": true,
+      "image": "/images/uploads/whatsapp-image-2024-02-19-at-6-08-02-pm-1-ms2rfeln.jpeg"
     },
     {
       "slug": "mushroom-momo",
