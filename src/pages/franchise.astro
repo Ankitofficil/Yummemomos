@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { site } from '../data/site';
+import { site, franchise as locations } from '../data/site';
 
 const benefits = [
   { icon: 'factory', title: 'Proven product', body: 'An award-winning, well-loved momo range with repeat demand.' },
@@ -10,28 +10,16 @@ const benefits = [
   { icon: 'heart', title: 'Long-term partnership', body: 'We back our partners for the long run, not a one-off order.' },
 ];
 
-// Live franchise / stockist locations. Partner names & photos can be added
-// later via the admin panel; WhatsApp/call goes to the franchise line.
-const locations = [
-  {
-    city: 'Durgapur',
-    state: 'West Bengal',
-    partner: 'Subrata Sujata Enterprise',
-    address: 'C2/3 Bidyasagar Pally, Benachity, Durgapur — 713213',
-  },
-  {
-    city: 'Ranchi',
-    state: 'Jharkhand',
-    partner: 'Tigmanshu',
-    address: 'Ground floor, Guru Kripa Lodge, Opposite AXIS Bank, Tharpakhna, Ranchi — 834001',
-  },
-  {
-    city: 'Baripada',
-    state: 'Odisha',
-    partner: 'Dillip Ray',
-    address: 'Babu Ward No. 15, New Colony, Near Tiranga Club, Baripada — 757001',
-  },
-];
+// Live franchise / stockist locations — editable in the admin panel
+// (Franchise tab). A location with no phone / WhatsApp of its own falls back
+// to the head-office numbers, so a half-filled record still has working links.
+const digits = (v: string) => (v || '').replace(/[^\d]/g, '');
+const waLink = (v: string) => `https://wa.me/${digits(v)}`;
+
+const contactFor = (loc: (typeof locations)[number]) => ({
+  tel: `tel:+${digits(loc.phone) || site.phones[0].value}`,
+  wa: digits(loc.whatsapp) ? waLink(loc.whatsapp!) : site.whatsappFranchise[0],
+});
 ---
 <BaseLayout
   title="Become a Partner — Yumme Momos Franchise & Stockist"
@@ -77,8 +65,18 @@ const locations = [
       <p class="mt-3 text-ink/70">Yumme Momos is already on the shelves across the region. Reach a local partner directly, or start your own.</p>
     </div>
     <div class="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {locations.map((loc, i) => (
+      {locations.map((loc, i) => {
+        const c = contactFor(loc);
+        return (
         <div class="reveal sticker flex flex-col p-6" style={`--reveal-delay:${(i % 3) * 0.1}s`}>
+          {loc.image && (
+            <img
+              src={loc.image}
+              alt={`Yumme Momos partner outlet in ${loc.city}`}
+              loading="lazy"
+              class="mb-5 block aspect-[3/2] w-full rounded-2xl border-2 border-ink object-cover"
+            />
+          )}
           <div class="flex items-center gap-3">
             <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full border-2 border-ink bg-fry text-ink"><Icon name="map" size={22} /></span>
             <div class="leading-tight">
@@ -89,15 +87,15 @@ const locations = [
           <p class="mt-4 font-semibold text-ink">{loc.partner}</p>
           <p class="mt-1 flex-1 text-[0.95rem] text-ink/70">{loc.address}</p>
           <div class="mt-5 flex flex-wrap gap-2">
-            <a href={site.whatsappFranchise[0]} target="_blank" rel="noopener" class="btn btn-primary flex-1 text-sm">
+            <a href={c.wa} target="_blank" rel="noopener" class="btn btn-primary flex-1 text-sm">
               <Icon name="whatsapp" size={16} /> WhatsApp
             </a>
-            <a href={`tel:+${site.phones[0].value}`} class="btn btn-ghost text-sm">
+            <a href={c.tel} class="btn btn-ghost text-sm">
               <Icon name="phone" size={16} /> Call
             </a>
           </div>
         </div>
-      ))}
+      );})}
     </div>
     <p class="mt-6 text-sm text-ink/50">Want to open a Yumme Momos franchise in your city? <a href="#enquiry" class="font-semibold text-chili-700 hover:underline">Send an enquiry</a> below.</p>
   </section>

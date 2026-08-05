@@ -142,6 +142,22 @@ function validate(c) {
   for (const v of c.videos) {
     if (!v.id?.trim()) return 'Every video needs a YouTube ID';
   }
+  // "franchise" is optional so older content.json files still save.
+  if ('franchise' in c) {
+    if (!Array.isArray(c.franchise)) return '"franchise" must be a list';
+    for (const f of c.franchise) {
+      if (!f.city?.trim()) return 'Every franchise location needs a city';
+      if (!f.partner?.trim()) return `Franchise "${f.city}" needs a partner name`;
+      for (const k of ['phone', 'whatsapp']) {
+        if (f[k] && !/^[\d+\s-]{6,}$/.test(f[k])) {
+          return `Franchise "${f.city}": ${k} must be digits (with country code), e.g. 919142081374`;
+        }
+      }
+      if (f.image != null && (typeof f.image !== 'string' || !f.image.startsWith('/'))) {
+        return `Franchise "${f.city}": image must be a site path like /images/uploads/…`;
+      }
+    }
+  }
   return null;
 }
 

@@ -279,6 +279,7 @@
   'use strict';
   const TABS = [
     ['products', '🥟 Products'],
+    ['franchise', '🏪 Franchise'],
     ['awards', '🏆 Awards'],
     ['faqs', '❓ FAQs'],
     ['videos', '▶ Videos'],
@@ -287,6 +288,7 @@
   ];
   const HINTS = {
     products: 'Items shown on the Menu page. “Featured” items also appear on the home page (first 6). Slug is the internal id — lowercase letters, numbers and dashes.',
+    franchise: 'Partner outlets shown on the Franchise page. Phone and WhatsApp take the full number with country code (e.g. 919142081374) — leave either blank to fall back to the head-office number.',
     awards: 'Shown on the Achievements page and the home-page awards panel. “ISO date” (YYYY-MM-DD) controls ordering metadata.',
     faqs: 'Shown on the Contact page.',
     videos: 'YouTube videos on the Achievements page. The ID is the part after “watch?v=” in a YouTube URL.',
@@ -302,6 +304,7 @@
   let token = sessionStorage.getItem('adminToken') || '';
   let setupMode = false;
   let pendingImageIndex = null;
+  let pendingImageList = 'products'; // which list the upload writes into
 
   const $ = (s) => document.querySelector(s);
   const esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -363,6 +366,37 @@
         </div>`).join('');
       return `<div class="add-bar"><button class="btn btn-primary" data-action="add-product">＋ Add product</button></div>
               ${cards || '<p class="empty">No products yet.</p>'}`;
+    },
+
+    franchise() {
+      const cards = (state.franchise || []).map((f, i) => `
+        <div class="card">
+          <div class="row-head">
+            <span class="tag">${esc(f.city) || 'New location'}</span>
+            <span class="spacer"></span>
+            ${itemButtons('franchise', i)}
+          </div>
+          <div class="grid cols-2">
+            ${text('City', `franchise.${i}.city`)}
+            ${text('State', `franchise.${i}.state`)}
+          </div>
+          <div style="margin-top:12px">${text('Partner / shop name', `franchise.${i}.partner`)}</div>
+          <div style="margin-top:12px">${text('Address', `franchise.${i}.address`, { area: true })}</div>
+          <div class="grid cols-2" style="margin-top:12px">
+            ${text('Phone (with country code)', `franchise.${i}.phone`, { mono: true })}
+            ${text('WhatsApp (with country code)', `franchise.${i}.whatsapp`, { mono: true })}
+          </div>
+          <div class="img-row">
+            ${f.image
+              ? `<img class="thumb" src="${esc(f.image)}" alt="" />`
+              : '<span class="thumb none">🏪</span>'}
+            <button class="btn btn-sm" data-action="pick-image" data-list="franchise" data-i="${i}">📷 ${f.image ? 'Replace' : 'Upload'} photo…</button>
+            ${f.image ? `<button class="btn btn-sm btn-danger" data-action="clear-image" data-list="franchise" data-i="${i}">Remove</button>` : ''}
+            <span class="img-note">${f.image ? esc(f.image) : 'No photo yet — the card shows just the details.'}</span>
+          </div>
+        </div>`).join('');
+      return `<div class="add-bar"><button class="btn btn-primary" data-action="add" data-list="franchise" data-tpl='{"city":"","state":"","partner":"","address":"","phone":"","whatsapp":""}'>＋ Add location</button></div>
+              ${cards || '<p class="empty">No franchise locations yet.</p>'}`;
     },
 
     awards() {
@@ -478,6 +512,7 @@
   const PREVIEW_LABEL = {
     products: 'Menu page', awards: 'Achievements', faqs: 'Contact · FAQ',
     videos: 'Achievements · videos', pillars: 'Home · promises', site: 'Site-wide',
+    franchise: 'Franchise · locations',
   };
   const preview = {
     products(focus) {
@@ -497,6 +532,30 @@
       return `<span class="pv-eyebrow">✦ The full range</span>
         <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">Our menu</h2>
         <div class="pv-grid">${cards}</div>`;
+    },
+    franchise(focus) {
+      const list = state.franchise || [];
+      if (!list.length) return '<p class="preview-empty">No locations yet — add one to see it here.</p>';
+      const dig = (v) => String(v || '').replace(/[^\d]/g, '');
+      const head = state.site.phones[0]?.value || '';
+      return `<span class="pv-eyebrow">🗺 Our partners</span>
+        <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">Franchise locations</h2>
+        ${list.map((f, i) => {
+          const tel = dig(f.phone) || head;
+          const wa = dig(f.whatsapp) || dig(f.phone) || head;
+          const fallback = !dig(f.phone) && !dig(f.whatsapp);
+          return `
+        <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}">
+          ${f.image ? `<img src="${esc(f.image)}" alt="" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;border:2px solid var(--ink);margin-bottom:10px" />` : ''}
+          <h4 class="pv-h" style="font-size:1.1rem;margin:0 0 2px">${esc(f.city) || '<span style="color:var(--ink-40)">Untitled city</span>'}</h4>
+          <p class="pv-date" style="margin:0 0 6px">${esc(f.state)}</p>
+          <p class="pv-desc" style="margin:0 0 2px;font-weight:600">${esc(f.partner) || '<span style="color:var(--ink-40)">No partner name</span>'}</p>
+          <p class="pv-desc" style="margin:0 0 8px">${esc(f.address) || '<span style="color:var(--ink-40)">No address yet.</span>'}</p>
+          <p class="pv-desc" style="margin:0;font-size:0.78rem">
+            💬 wa.me/${esc(wa) || '—'} &nbsp;·&nbsp; 📞 +${esc(tel) || '—'}
+            ${fallback ? '<br><span style="color:var(--ink-40)">Using head-office numbers (none set for this location)</span>' : ''}
+          </p>
+        </div>`;}).join('')}`;
     },
     awards(focus) {
       if (!state.awards.length) return '<p class="preview-empty">No awards yet.</p>';
@@ -640,11 +699,12 @@
     if (!action) return;
     if (action === 'pick-image') {
       pendingImageIndex = +i;
+      pendingImageList = list || 'products';
       $('#file-input').click();
       return;
     }
     if (action === 'clear-image') {
-      delete state.products[+i].image;
+      delete get(state, list || 'products')[+i].image;
       markDirty();
       renderPanel();
       return;
@@ -685,7 +745,7 @@
       }
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || res.statusText);
-      state.products[pendingImageIndex].image = data.path;
+      get(state, pendingImageList)[pendingImageIndex].image = data.path;
       markDirty();
       renderPanel();
       setStatus('Photo uploaded — remember to Save changes');
@@ -842,6 +902,9 @@
       return;
     }
     state = await res.json();
+    // Older content.json files predate the Franchise tab — normalise so the
+    // list renderers and "Add location" have something to work with.
+    if (!Array.isArray(state.franchise)) state.franchise = [];
     setStatus('');
     applyPreviewVisibility();
     renderTabs();

@@ -18,12 +18,26 @@ export type Product = {
   image?: string;
 };
 
+export type Franchise = {
+  city: string;
+  state: string;
+  partner: string;
+  address: string;
+  /** Dial value with country code, e.g. 919142081374. Blank → falls back to the head-office line. */
+  phone?: string;
+  /** Dial value with country code for WhatsApp. Blank → falls back to the franchise line. */
+  whatsapp?: string;
+  /** Site-root path, e.g. /images/uploads/durgapur.jpg (set via the admin panel) */
+  image?: string;
+};
+
 export const site = content.site;
 export const pillars = content.pillars;
 export const products: Product[] = content.products;
 export const awards = content.awards;
 export const videos = content.videos;
 export const faqs = content.faqs;
+export const franchise: Franchise[] = content.franchise;
 
 // --- Navigation (structural — edit here, not in the admin panel) ---
 export const nav = [

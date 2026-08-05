@@ -150,6 +150,32 @@
       "iso": "2026-04-14"
     }
   ],
+  "franchise": [
+    {
+      "city": "Durgapur",
+      "state": "West Bengal",
+      "partner": "Subrata Sujata Enterprise",
+      "address": "C2/3 Bidyasagar Pally, Benachity, Durgapur — 713213",
+      "phone": "",
+      "whatsapp": ""
+    },
+    {
+      "city": "Ranchi",
+      "state": "Jharkhand",
+      "partner": "Tigmanshu",
+      "address": "Ground floor, Guru Kripa Lodge, Opposite AXIS Bank, Tharpakhna, Ranchi — 834001",
+      "phone": "",
+      "whatsapp": ""
+    },
+    {
+      "city": "Baripada",
+      "state": "Odisha",
+      "partner": "Dillip Ray",
+      "address": "Babu Ward No. 15, New Colony, Near Tiranga Club, Baripada — 757001",
+      "phone": "",
+      "whatsapp": ""
+    }
+  ],
   "videos": [
     {
       "id": "GLTA4wImT4I",
