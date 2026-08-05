@@ -546,7 +546,9 @@
           const fallback = !dig(f.phone) && !dig(f.whatsapp);
           return `
         <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}">
-          ${f.image ? `<img src="${esc(f.image)}" alt="" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;border:2px solid var(--ink);margin-bottom:10px" />` : ''}
+          ${f.image
+            ? `<img src="${esc(f.image)}" alt="" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;border:2px solid var(--ink);margin-bottom:10px" />`
+            : `<div style="width:100%;aspect-ratio:3/2;border-radius:12px;border:2px solid var(--ink);margin-bottom:10px;background:linear-gradient(135deg,#fdf0c2,#ffe9c2);display:grid;place-items:center;color:var(--ink-40);font-size:0.72rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase">🏪 ${esc(f.city) || 'No photo'}</div>`}
           <h4 class="pv-h" style="font-size:1.1rem;margin:0 0 2px">${esc(f.city) || '<span style="color:var(--ink-40)">Untitled city</span>'}</h4>
           <p class="pv-date" style="margin:0 0 6px">${esc(f.state)}</p>
           <p class="pv-desc" style="margin:0 0 2px;font-weight:600">${esc(f.partner) || '<span style="color:var(--ink-40)">No partner name</span>'}</p>

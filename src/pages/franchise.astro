@@ -69,13 +69,25 @@ const contactFor = (loc: (typeof locations)[number]) => ({
         const c = contactFor(loc);
         return (
         <div class="reveal sticker flex flex-col p-6" style={`--reveal-delay:${(i % 3) * 0.1}s`}>
-          {loc.image && (
+          {loc.image ? (
             <img
               src={loc.image}
               alt={`Yumme Momos partner outlet in ${loc.city}`}
               loading="lazy"
               class="mb-5 block aspect-[3/2] w-full rounded-2xl border-2 border-ink object-cover"
             />
+          ) : (
+            /* No photo yet — branded placeholder keeps every card the same shape.
+               Upload a real one via the admin panel (Franchise tab). */
+            <div
+              aria-hidden="true"
+              class="mb-5 grid aspect-[3/2] w-full place-items-center rounded-2xl border-2 border-ink bg-gradient-to-br from-cream-deep to-fry-100"
+            >
+              <span class="text-center text-ink/30">
+                <Icon name="factory" size={44} class="mx-auto" />
+                <span class="mt-1.5 block text-xs font-bold uppercase tracking-wide">{loc.city}</span>
+              </span>
+            </div>
           )}
           <div class="flex items-center gap-3">
             <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full border-2 border-ink bg-fry text-ink"><Icon name="map" size={22} /></span>
