@@ -8,6 +8,46 @@ const sections = [
   { id: 'banking', label: 'Banking details' },
   { id: 'legal', label: 'Legal & registration' },
 ];
+
+// Government registrations. Numbers are transcribed from the certificates
+// themselves, which are shown below and open full-size in a new tab.
+const certificates = [
+  {
+    title: 'Udyam (MSME) Registration',
+    issuer: 'Ministry of Micro, Small and Medium Enterprises, Government of India',
+    number: 'UDYAM-JH-06-0024814',
+    src: '/images/legal/udyam-registration.jpg',
+    alt: 'Udyam Registration Certificate for Yumme Momos, number UDYAM-JH-06-0024814',
+  },
+  {
+    title: 'FSSAI Registration',
+    issuer: 'Food Safety and Standards Authority of India',
+    number: '21123253000049',
+    src: '/images/legal/fssai-registration.jpg',
+    alt: 'FSSAI registration certificate for Yumme Momos, number 21123253000049',
+  },
+  {
+    title: 'GST Registration',
+    issuer: 'Goods and Services Tax, Government of India',
+    number: '20BPTPG7864K1ZD',
+    src: '/images/legal/gst-registration.jpg',
+    alt: 'GST registration certificate Form GST REG-06 for Yumme Momos, GSTIN 20BPTPG7864K1ZD',
+  },
+  {
+    title: 'Shops & Establishment Registration',
+    issuer: 'Dept. of Labour, Employment and Training, Government of Jharkhand',
+    number: 'SEA2235780443203',
+    src: '/images/legal/shops-establishment.jpg',
+    alt: 'Jharkhand Shops and Establishments certificate of registration for Yumme Momos',
+  },
+  {
+    title: 'Central KYC Registry',
+    issuer: 'CERSAI — Central KYC Records Registry',
+    number: '70054999397066',
+    src: '/images/legal/ckyc-registry.jpg',
+    alt: 'Central KYC Registry record for Yumme Momos, KYC identifier 70054999397066',
+  },
+];
 ---
 <BaseLayout
   title="Legal, Terms & Banking — Yumme Momos"
@@ -69,9 +109,48 @@ const sections = [
         <p class="mt-2 text-ink/75">
           {site.name}, {site.address.full}. Operating since {site.established}.
         </p>
-        <div class="mt-3 rounded-xl border border-fry/40 bg-fry-100/40 p-5 text-ink/70">
-          <p><strong>TODO: client to provide</strong> — GST number, FSSAI licence number, and any business registration details. The live “Legal” page currently contains no registration content, so nothing has been fabricated here.</p>
-        </div>
+        <!-- Registration numbers, transcribed from the certificates below -->
+        <dl class="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+          {certificates.map((c) => (
+            <div>
+              <dt class="text-sm font-semibold text-ink/60">{c.title}</dt>
+              <dd class="mt-0.5 font-mono text-base text-ink">{c.number}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <h3 class="mt-10 text-xl">Certificates</h3>
+        <p class="mt-2 text-ink/70">Tap any certificate to view it full size.</p>
+
+        <ul class="mt-6 grid gap-8 sm:grid-cols-2">
+          {certificates.map((c) => (
+            <li>
+              <figure>
+                <a
+                  href={c.src}
+                  target="_blank"
+                  rel="noopener"
+                  class="block overflow-hidden rounded-2xl border-2 border-ink shadow-[4px_4px_0_0_var(--color-ink)] transition hover:-translate-y-0.5"
+                >
+                  <img
+                    src={c.src}
+                    alt={c.alt}
+                    width="1200"
+                    height="1698"
+                    loading="lazy"
+                    decoding="async"
+                    class="w-full bg-white object-contain"
+                  />
+                </a>
+                <figcaption class="mt-3">
+                  <span class="block font-semibold text-ink">{c.title}</span>
+                  <span class="mt-0.5 block text-sm text-ink/65">{c.issuer}</span>
+                  <span class="mt-0.5 block font-mono text-sm text-ink/75">{c.number}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   </section>
