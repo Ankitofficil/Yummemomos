@@ -201,20 +201,12 @@
       "a": "The fastest way is WhatsApp or a call — tap “Order on WhatsApp” or ring us on 9142081374 / 7209412954. You can also order and book through the Yumme Momos app."
     },
     {
-      "q": "Which areas do you deliver to?",
-      "a": "TODO: client to confirm delivery coverage (Jamshedpur & regional area)."
-    },
-    {
-      "q": "Is there a minimum order quantity (MOQ) for B2B / retailers?",
-      "a": "TODO: client to confirm B2B minimum order quantity and bulk pricing."
-    },
-    {
       "q": "How long does delivery take?",
       "a": "Deliveries take a minimum of 1 day. You’ll get an order confirmation on the email or WhatsApp linked to your order."
     },
     {
       "q": "How does a franchise / stockist partnership work?",
-      "a": "Share your details through the enquiry form or WhatsApp us directly — our team will walk you through products, terms and next steps. TODO: client to confirm franchise investment & terms."
+      "a": "Share your details through the enquiry form or WhatsApp us directly — our team will walk you through products, terms and next steps."
     }
   ]
 }
