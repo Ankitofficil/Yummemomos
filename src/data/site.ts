@@ -31,10 +31,19 @@ export type Franchise = {
   image?: string;
 };
 
+export type Award = {
+  title: string;
+  by?: string;
+  date?: string;
+  iso?: string;
+  /** Site-root path, e.g. /images/uploads/award-2024.jpg (set via the admin panel) */
+  image?: string;
+};
+
 export const site = content.site;
 export const pillars = content.pillars;
 export const products: Product[] = content.products;
-export const awards = content.awards;
+export const awards: Award[] = content.awards;
 export const videos = content.videos;
 export const faqs = content.faqs;
 export const franchise: Franchise[] = content.franchise;

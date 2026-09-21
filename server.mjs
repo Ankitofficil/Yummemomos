@@ -151,9 +151,17 @@ function validate(c) {
     if (p.image != null && (typeof p.image !== 'string' || !p.image.startsWith('/')))
       return `Product "${p.name}": image must be a site path`;
   }
-  for (const a of c.awards) if (!a.title?.trim()) return 'Every award needs a title';
+  for (const a of c.awards) {
+    if (!a.title?.trim()) return 'Every award needs a title';
+    if (a.image != null && (typeof a.image !== 'string' || !a.image.startsWith('/')))
+      return `Award "${a.title}": image must be a site path`;
+  }
   for (const f of c.faqs) if (!f.q?.trim() || !f.a?.trim()) return 'Every FAQ needs a question and answer';
-  for (const v of c.videos) if (!v.id?.trim()) return 'Every video needs a YouTube ID';
+  for (const v of c.videos) {
+    if (!v.id?.trim()) return 'Every video needs a YouTube link';
+    if (!/^[\w-]{11}$/.test(v.id.trim()))
+      return `Video "${v.title || v.id}": “${v.id}” is not a YouTube video ID — paste the full YouTube link`;
+  }
   return null;
 }
 

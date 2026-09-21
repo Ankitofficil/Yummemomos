@@ -27,6 +27,15 @@ import { awards, videos } from '../data/site';
               <Icon name="star" size={12} />
             </span>
             <div class="sticker p-6">
+              {a.image && (
+                <img
+                  src={a.image}
+                  alt={`${a.title}${a.by ? ` — ${a.by}` : ''}`}
+                  loading="lazy"
+                  decoding="async"
+                  class="mb-4 w-full rounded-xl border-2 border-ink object-contain"
+                />
+              )}
               <p class="text-sm font-semibold text-tang-600">{a.date}</p>
               <h2 class="mt-1 text-2xl">{a.title}</h2>
               <p class="mt-1 text-ink/70">{a.by}</p>

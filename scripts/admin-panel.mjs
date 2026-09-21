@@ -135,12 +135,20 @@ function validate(c) {
   }
   for (const a of c.awards) {
     if (!a.title?.trim()) return 'Every award needs a title';
+    if (a.image != null && (typeof a.image !== 'string' || !a.image.startsWith('/'))) {
+      return `Award "${a.title}": image must be a site path like /images/uploads/…`;
+    }
   }
   for (const f of c.faqs) {
     if (!f.q?.trim() || !f.a?.trim()) return 'Every FAQ needs a question and an answer';
   }
   for (const v of c.videos) {
-    if (!v.id?.trim()) return 'Every video needs a YouTube ID';
+    if (!v.id?.trim()) return 'Every video needs a YouTube link';
+    // The panel extracts this from whatever link is pasted; catch anything that
+    // slipped through (a full URL, a truncated id) before it reaches the site.
+    if (!/^[\w-]{11}$/.test(v.id.trim())) {
+      return `Video "${v.title || v.id}": “${v.id}” is not a YouTube video ID — paste the full YouTube link`;
+    }
   }
   // "franchise" is optional so older content.json files still save.
   if ('franchise' in c) {

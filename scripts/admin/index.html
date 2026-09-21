@@ -289,9 +289,9 @@
   const HINTS = {
     products: 'Items shown on the Menu page. “Featured” items also appear on the home page (first 6). Slug is the internal id — lowercase letters, numbers and dashes.',
     franchise: 'Partner outlets shown on the Franchise page. Phone and WhatsApp take the full number with country code (e.g. 919142081374) — leave either blank to fall back to the head-office number.',
-    awards: 'Shown on the Achievements page and the home-page awards panel. “ISO date” (YYYY-MM-DD) controls ordering metadata.',
+    awards: 'Shown on the Achievements page and the home-page awards panel. Add an optional photo (certificate, trophy or ceremony). “ISO date” (YYYY-MM-DD) controls ordering metadata.',
     faqs: 'Shown on the Contact page.',
-    videos: 'YouTube videos on the Achievements page. The ID is the part after “watch?v=” in a YouTube URL.',
+    videos: 'YouTube videos on the Achievements page. Paste the full YouTube link — the video ID is picked out automatically.',
     pillars: 'The three promise cards on the home page. Icon is one of the site’s icon names (heart, mountain, leaf, star, sparkle…).',
     site: 'Contact details, links and brand copy used across every page. Save, then check the running site — it reloads automatically.',
   };
@@ -329,6 +329,23 @@
      </label>`;
   const check = (label, path) =>
     `<label class="check"><input type="checkbox" data-path="${esc(path)}" data-type="bool" ${get(state, path) ? 'checked' : ''}/> ${esc(label)}</label>`;
+
+  // Pull the 11-character video ID out of any YouTube link people paste:
+  // watch?v=…, youtu.be/…, /shorts/…, /embed/…, /live/… — with or without
+  // extra query params. A bare ID is passed straight through, and anything
+  // unrecognised is left as typed so the editor can see and fix it.
+  const youtubeId = (raw) => {
+    const s = (raw || '').trim();
+    if (!s) return '';
+    if (/^[\w-]{11}$/.test(s)) return s;
+    const m = s.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/|v\/)|youtu\.be\/)([\w-]{11})/);
+    return m ? m[1] : s;
+  };
+  // The stored value is the bare id; the editor shows the whole link, so what
+  // is in the box matches what you would copy from YouTube's address bar.
+  // Anything that is not a clean id (a half-typed link) is shown back as typed.
+  const youtubeUrl = (id) =>
+    /^[\w-]{11}$/.test(id || '') ? `https://www.youtube.com/watch?v=${id}` : (id || '');
   const itemButtons = (list, i) => `
     <button class="btn btn-sm" data-action="move" data-list="${list}" data-i="${i}" data-dir="-1" ${i === 0 ? 'disabled' : ''}>↑</button>
     <button class="btn btn-sm" data-action="move" data-list="${list}" data-i="${i}" data-dir="1" ${i === get(state, list).length - 1 ? 'disabled' : ''}>↓</button>
@@ -409,6 +426,14 @@
             ${text('Display date', `awards.${i}.date`)}
             ${text('ISO date (YYYY-MM-DD)', `awards.${i}.iso`, { mono: true })}
           </div>
+          <div class="img-row">
+            ${a.image
+              ? `<img class="thumb" src="${esc(a.image)}" alt="" />`
+              : '<span class="thumb none">🏆</span>'}
+            <button class="btn btn-sm" data-action="pick-image" data-list="awards" data-i="${i}">📷 ${a.image ? 'Replace' : 'Upload'} photo…</button>
+            ${a.image ? `<button class="btn btn-sm btn-danger" data-action="clear-image" data-list="awards" data-i="${i}">Remove</button>` : ''}
+            <span class="img-note">${a.image ? esc(a.image) : 'No photo yet — the card shows just the details.'}</span>
+          </div>
         </div>`).join('');
       return `<div class="add-bar"><button class="btn btn-primary" data-action="add" data-list="awards" data-tpl='{"title":"","by":"","date":"","iso":""}'>＋ Add award</button></div>
               ${cards || '<p class="empty">No awards yet.</p>'}`;
@@ -425,14 +450,27 @@
     },
 
     videos() {
-      const cards = state.videos.map((v, i) => `
+      const cards = state.videos.map((v, i) => {
+        const ok = /^[\w-]{11}$/.test(v.id || '');
+        return `
         <div class="card">
           <div class="row-head"><span class="spacer"></span>${itemButtons('videos', i)}</div>
           <div class="grid cols-2">
-            ${text('YouTube ID', `videos.${i}.id`, { mono: true })}
+            <label class="field">YouTube link
+              <input type="text" data-path="videos.${i}.id" data-transform="youtube" spellcheck="false"
+                     placeholder="https://www.youtube.com/watch?v=…" value="${esc(youtubeUrl(v.id))}" />
+            </label>
             ${text('Title', `videos.${i}.title`)}
           </div>
-        </div>`).join('');
+          <p class="img-note" style="margin-top:8px">
+            ${v.id
+              ? (ok
+                  ? `✓ Video <strong>${esc(v.id)}</strong> — <a href="${esc(youtubeUrl(v.id))}" target="_blank" rel="noopener">open on YouTube ↗</a>`
+                  : `⚠ “${esc(v.id)}” is not a valid YouTube link. Paste the link from the address bar.`)
+              : 'Paste a YouTube link (watch, youtu.be, Shorts or embed) — any link format works.'}
+          </p>
+        </div>`;
+      }).join('');
       return `<div class="add-bar"><button class="btn btn-primary" data-action="add" data-list="videos" data-tpl='{"id":"","title":""}'>＋ Add video</button></div>${cards}`;
     },
 
@@ -565,6 +603,9 @@
         <h2 class="pv-h" style="font-size:1.6rem;margin:10px 0 2px">Award-winning momos</h2>
         ${state.awards.map((a, i) => `
         <div class="pv-list-card${i === focus ? ' flash' : ''}" data-pv="${i}">
+          ${a.image
+            ? `<img src="${esc(a.image)}" alt="" style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;border:2px solid var(--ink);margin-bottom:10px" />`
+            : ''}
           <div style="display:flex;gap:12px;align-items:flex-start">
             <span class="pv-award-star">★</span>
             <div>
@@ -668,7 +709,8 @@
   document.addEventListener('input', (e) => {
     const path = e.target.dataset?.path;
     if (!path) return;
-    const val = e.target.dataset.type === 'bool' ? e.target.checked : e.target.value;
+    let val = e.target.dataset.type === 'bool' ? e.target.checked : e.target.value;
+    if (e.target.dataset.transform === 'youtube') val = youtubeId(val);
     set(state, path, val);
     markDirty();
     renderPreview(focusIndex(path)); // live: update preview as they type
