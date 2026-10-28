@@ -152,14 +152,6 @@
   ],
   "franchise": [
     {
-      "city": "Durgapur",
-      "state": "West Bengal",
-      "partner": "Subrata Sujata Enterprise",
-      "address": "C2/3 Bidyasagar Pally, Benachity, Durgapur — 713213",
-      "phone": "",
-      "whatsapp": ""
-    },
-    {
       "city": "Ranchi",
       "state": "Jharkhand",
       "partner": "Tigmanshu",
@@ -173,6 +165,23 @@
       "state": "Odisha",
       "partner": "Dillip Ray",
       "address": "Babu Ward No. 15, New Colony, Near Tiranga Club, Baripada — 757001",
+      "phone": "",
+      "whatsapp": ""
+    },
+    {
+      "city": "GARHWA ",
+      "state": "JHARKHAND",
+      "partner": "The Desi Momo",
+      "address": "Garhwa ",
+      "phone": "9142081374",
+      "whatsapp": "9142081374",
+      "image": "/images/uploads/whatsapp-image-2026-04-03-at-11-18-16-am-mvrq6vmn.jpeg"
+    },
+    {
+      "city": "",
+      "state": "",
+      "partner": "",
+      "address": "",
       "phone": "",
       "whatsapp": ""
     }
